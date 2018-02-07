@@ -13,9 +13,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.jeefw.cas.oauth.sina;
+package org.apache.shiro.spring.boot.oauth2.plugin;
 
-import org.pac4j.core.profile.UserProfile;
+import org.scribe.builder.ServiceBuilder;
+import org.scribe.up.profile.JsonHelper;
+import org.scribe.up.profile.UserProfile;
+import org.scribe.up.provider.BaseOAuth20Provider;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -49,7 +52,7 @@ public class SinaWeiboProvider extends BaseOAuth20Provider {
 	  
 	  @Override
 	  protected String getProfileUrl() {
-	    return "https://api.weibo.com/2/statuses/user_timeline.json";
+	    return OAuthConstants.SINA_PROFILE_URL;
 	  }
 	  
 	  @Override
@@ -67,14 +70,12 @@ public class SinaWeiboProvider extends BaseOAuth20Provider {
 	    }
 	    JsonNode subJson = userJson.get("id");
 	    if (subJson != null) {
-	      UserProfileHelper
-	          .addAttribute(userProfile, "uid", subJson.getIntValue());
+	      UserProfileHelper.addAttribute(userProfile, "uid", subJson.getIntValue());
 	      
 	    }
 	    subJson = userJson.get("domain");
 	    if (subJson != null) {
-	      UserProfileHelper.addAttribute(userProfile, "username",
-	          subJson.getTextValue());     
+	      UserProfileHelper.addAttribute(userProfile, "username", subJson.getTextValue());     
 	    }
 
 	    return userProfile;

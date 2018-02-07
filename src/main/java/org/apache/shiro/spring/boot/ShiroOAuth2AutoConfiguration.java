@@ -10,12 +10,15 @@ import java.util.Map.Entry;
 import javax.servlet.Filter;
 
 import org.apache.commons.collections.MapUtils;
+import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
 import org.apache.shiro.biz.realm.PrincipalRealmListener;
 import org.apache.shiro.biz.spring.ShiroFilterProxyFactoryBean;
 import org.apache.shiro.biz.web.filter.authc.LoginListener;
 import org.apache.shiro.biz.web.filter.authc.LogoutListener;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.boot.cache.ShiroEhCacheAutoConfiguration;
+import org.apache.shiro.spring.boot.oauth2.principal.OauthPrincipalRepository;
 import org.apache.shiro.spring.config.web.autoconfigure.ShiroWebAutoConfiguration;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
@@ -26,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -38,6 +42,10 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ObjectUtils;
+
+import io.buji.oauth.OAuthFilter;
+import io.buji.oauth.OAuthRealm;
+import io.buji.oauth.filter.OAuthUserFilter;
 
 
 /**
@@ -230,15 +238,59 @@ import org.springframework.util.ObjectUtils;
 @Configuration
 @AutoConfigureBefore(ShiroWebAutoConfiguration.class)
 @AutoConfigureAfter(ShiroEhCacheAutoConfiguration.class)
-@ConditionalOnProperty(prefix = ShiroAauth2Properties.PREFIX, value = "enabled", havingValue = "true")
-@EnableConfigurationProperties({ ShiroAauth2Properties.class })
-public class ShiroAauth2AutoConfiguration implements ApplicationContextAware {
+@ConditionalOnProperty(prefix = ShiroOAuth2Properties.PREFIX, value = "enabled", havingValue = "true")
+@EnableConfigurationProperties({ ShiroOAuth2Properties.class })
+public class ShiroOAuth2AutoConfiguration implements ApplicationContextAware {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ShiroAauth2AutoConfiguration.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ShiroOAuth2AutoConfiguration.class);
 	private ApplicationContext applicationContext;
 	
 	@Autowired
-	private ShiroAauth2Properties properties;
+	private ShiroOAuth2Properties properties;
+	
+	@Bean("oauth2")
+	@ConditionalOnMissingBean(name = "oauth2")
+	public FilterRegistrationBean casFilter(ShiroOAuth2Properties properties){
+		FilterRegistrationBean registration = new FilterRegistrationBean(); 
+		OAuthFilter oauthFilter = new OAuthFilter();
+		//oauthFilter.setFailureUrl(properties.getFailureUrl());
+		registration.setFilter(oauthFilter);
+	    registration.setEnabled(false); 
+	    return registration;
+	}
+	
+	@Bean("user")
+	@ConditionalOnMissingBean(name = "user")
+	public FilterRegistrationBean userFilter(ShiroOAuth2Properties properties){
+		FilterRegistrationBean registration = new FilterRegistrationBean(); 
+		OAuthUserFilter oauthFilter = new OAuthUserFilter();
+		//oauthFilter.setFailureUrl(properties.getFailureUrl());
+		registration.setFilter(oauthFilter);
+	    registration.setEnabled(false); 
+	    return registration;
+	}
+	
+	@Bean
+	public Realm casRealm(@Qualifier("oauthRepository") OauthPrincipalRepository repository,
+			List<PrincipalRealmListener> realmsListeners) {
+		
+		OAuthRealm oauthRealm = new OAuthRealm();
+		
+		//凭证匹配器：该对象主要做密码校验
+		oauthRealm.setCredentialsMatcher(new AllowAllCredentialsMatcher());
+		//缓存相关的配置：采用提供的默认配置即可
+		oauthRealm.setCachingEnabled(properties.isCachingEnabled());
+		//认证缓存配置
+		oauthRealm.setAuthenticationCachingEnabled(properties.isAuthenticationCachingEnabled());
+		oauthRealm.setAuthenticationCacheName(properties.getAuthenticationCacheName());
+		//授权缓存配置
+		oauthRealm.setAuthorizationCachingEnabled(properties.isAuthorizationCachingEnabled());
+		oauthRealm.setAuthorizationCacheName(properties.getAuthorizationCacheName());
+		
+		return oauthRealm;
+	}
+	
+	
 	
 	/**
 	 * 登录监听：实现该接口可监听账号登录失败和成功的状态，从而做业务系统自己的事情，比如记录日志

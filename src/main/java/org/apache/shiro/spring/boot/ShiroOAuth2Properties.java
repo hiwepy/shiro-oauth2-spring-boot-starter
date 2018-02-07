@@ -24,8 +24,8 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(ShiroAauth2Properties.PREFIX)
-public class ShiroAauth2Properties {
+@ConfigurationProperties(ShiroOAuth2Properties.PREFIX)
+public class ShiroOAuth2Properties {
 
 	public static final String PREFIX = "shiro";
 	
