@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth2.plugin;
+package org.apache.shiro.spring.boot.oauth.buji.scribe;
 
 public class OAuthConstants extends org.scribe.model.OAuthConstants{
 

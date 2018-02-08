@@ -13,10 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth2.principal;
+package org.apache.shiro.spring.boot.oauth.buji.scribe;
 
-import org.apache.shiro.biz.principal.PrincipalRepository;
+import org.apache.shiro.spring.boot.oauth.buji.scribe.profile.sina.SinaAttributesDefinition;
+import org.scribe.up.profile.AttributesDefinition;
 
-public interface OauthPrincipalRepository extends PrincipalRepository {
+public class OAuthAttributesDefinitions {
 
+	 public final static AttributesDefinition sinaDefinition = new SinaAttributesDefinition();
+	   
+	 
 }

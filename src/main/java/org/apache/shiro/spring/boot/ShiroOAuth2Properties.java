@@ -16,12 +16,15 @@
 package org.apache.shiro.spring.boot;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.biz.web.filter.authc.AbstractCaptchaAuthenticatingFilter;
 import org.apache.shiro.biz.web.filter.authc.KickoutSessionControlFilter;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
+import org.scribe.up.provider.OAuthProvider;
+import org.scribe.up.provider.ProvidersDefinition;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(ShiroOAuth2Properties.PREFIX)
@@ -69,6 +72,16 @@ public class ShiroOAuth2Properties {
     private String unauthorizedUrl;
 	
 	private Map<String /* pattert */, String /* Chain names */> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+	
+	
+    private String baseUrl;
+    
+    private String providerTypeParameter = ProvidersDefinition.DEFAULT_PROVIDER_TYPE_PARAMETER;
+    // default roles applied to authenticated user
+    private String defaultRoles;
+    
+    // default permissions applied to authenticated user
+    private String defaultPermissions;
 	
 	public boolean isEnabled() {
 		return enabled;
@@ -267,7 +280,38 @@ public class ShiroOAuth2Properties {
 	public void setFilterChainDefinitionMap(Map<String, String> filterChainDefinitionMap) {
 		this.filterChainDefinitionMap = filterChainDefinitionMap;
 	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
     
+	public String getProviderTypeParameter() {
+		return providerTypeParameter;
+	}
+
+	public void setProviderTypeParameter(String providerTypeParameter) {
+		this.providerTypeParameter = providerTypeParameter;
+	}
+
+	public String getDefaultRoles() {
+		return defaultRoles;
+	}
+
+	public void setDefaultRoles(String defaultRoles) {
+		this.defaultRoles = defaultRoles;
+	}
+
+	public String getDefaultPermissions() {
+		return defaultPermissions;
+	}
+
+	public void setDefaultPermissions(String defaultPermissions) {
+		this.defaultPermissions = defaultPermissions;
+	}
 
 }
 

@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth2.plugin;
+package org.apache.shiro.spring.boot.oauth.buji.scribe.api;
 
+import org.apache.shiro.spring.boot.oauth.buji.scribe.OAuthConstants;
 import org.scribe.builder.api.DefaultApi20;
 import org.scribe.model.OAuthConfig;
 import org.scribe.utils.OAuthEncoder;

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth2.plugin;
+package org.apache.shiro.spring.boot.oauth.buji.scribe.provider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.shiro.spring.boot.oauth.buji.scribe.OAuthConstants;
+import org.apache.shiro.spring.boot.oauth.buji.scribe.api.QQApi20;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.model.Token;
 import org.scribe.up.profile.JsonHelper;
@@ -39,18 +41,16 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public final class QQProvider extends BaseOAuth20Provider {
     
-    private String serverUrl;
     
     @Override
     protected void internalInit() {
-    	QQApi20.setServerUrl(this.serverUrl);
         this.service = new ServiceBuilder().provider(QQApi20.class).apiKey(this.key).apiSecret(this.secret)
             .callback(this.callbackUrl).build();
     }
     
     @Override
     protected String getProfileUrl() {
-        return this.serverUrl + "/" + OAuthConstants.QQ_PROFILE_URL;
+        return OAuthConstants.QQ_PROFILE_URL;
     }
     
 	@Override

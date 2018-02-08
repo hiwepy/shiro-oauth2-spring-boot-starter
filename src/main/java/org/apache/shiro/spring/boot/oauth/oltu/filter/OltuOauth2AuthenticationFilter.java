@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth2.oltu.filter;
+package org.apache.shiro.spring.boot.oauth.oltu.filter;
 
 import java.io.IOException;
 
@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.biz.utils.StringUtils;
-import org.apache.shiro.spring.boot.oauth2.oltu.token.OltuOauth2Token;
+import org.apache.shiro.spring.boot.oauth.oltu.token.OltuOauth2Token;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
