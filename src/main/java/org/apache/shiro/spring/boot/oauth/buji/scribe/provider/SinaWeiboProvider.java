@@ -15,11 +15,11 @@
  */
 package org.apache.shiro.spring.boot.oauth.buji.scribe.provider;
 
-import org.apache.shiro.spring.boot.oauth.buji.scribe.OAuthAttributesDefinitions;
-import org.apache.shiro.spring.boot.oauth.buji.scribe.OAuthConstants;
-import org.apache.shiro.spring.boot.oauth.buji.scribe.api.SinaWeiboApi20;
+import org.apache.shiro.spring.boot.oauth.buji.scribe.profile.sina.SinaAttributesDefinition;
 import org.apache.shiro.spring.boot.oauth.buji.scribe.profile.sina.SinaProfile;
 import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.SinaWeiboApi20;
+import org.scribe.up.profile.AttributesDefinition;
 import org.scribe.up.profile.JsonHelper;
 import org.scribe.up.profile.UserProfile;
 import org.scribe.up.provider.BaseOAuth20Provider;
@@ -35,6 +35,9 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public final class SinaWeiboProvider extends BaseOAuth20Provider {
     
+	private final static AttributesDefinition SINA_ATTRIBUTES = new SinaAttributesDefinition();
+	private final static String PROFILE_URL = "https://api.weibo.com/2/statuses/user_timeline.json";
+	 
     @Override
     protected void internalInit() {
         this.service = new ServiceBuilder().provider(SinaWeiboApi20.class).apiKey(this.key).apiSecret(this.secret)
@@ -43,7 +46,7 @@ public final class SinaWeiboProvider extends BaseOAuth20Provider {
     
     @Override
     protected String getProfileUrl() {
-        return OAuthConstants.SINA_PROFILE_URL;
+        return PROFILE_URL;
     }
     
     @Override
@@ -52,7 +55,7 @@ public final class SinaWeiboProvider extends BaseOAuth20Provider {
         JsonNode json = JsonHelper.getFirstNode(body);
         if (json != null) {
             profile.setId(JsonHelper.get(json, "ID"));
-            for (final String attribute : OAuthAttributesDefinitions.sinaDefinition.getPrincipalAttributes()) {
+            for (final String attribute : SINA_ATTRIBUTES.getPrincipalAttributes()) {
                 profile.addAttribute(attribute, JsonHelper.get(json, attribute));
             }
            /* json = json.get("meta");

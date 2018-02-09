@@ -15,22 +15,26 @@
  */
 package org.apache.shiro.spring.boot.oauth.buji.scribe.provider;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.shiro.spring.boot.oauth.buji.scribe.OAuthConstants;
 import org.apache.shiro.spring.boot.oauth.buji.scribe.api.QQApi20;
-import org.scribe.builder.ServiceBuilder;
+import org.apache.shiro.spring.boot.oauth.buji.scribe.profile.qq.QQAttributesDefinition;
+import org.apache.shiro.spring.boot.oauth.buji.scribe.profile.qq.QQOAuth20ServiceImpl;
+import org.apache.shiro.spring.boot.oauth.buji.scribe.profile.qq.QQProfile;
+import org.scribe.model.OAuthConfig;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.SignatureType;
 import org.scribe.model.Token;
+import org.scribe.model.Verb;
 import org.scribe.up.profile.JsonHelper;
-import org.scribe.up.profile.UserProfile;
 import org.scribe.up.provider.BaseOAuth20Provider;
 import org.scribe.up.provider.BaseOAuthProvider;
+import org.scribe.up.provider.exception.HttpException;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
@@ -41,127 +45,93 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public final class QQProvider extends BaseOAuth20Provider {
     
-    
+	private static Pattern openIdPattern = Pattern.compile("\"openid\":\\s*\"(\\S*?)\"");
+	private static final String PROFILE_URL = "https://graph.qq.com/user/get_user_info";
+	private final static QQAttributesDefinition QQ_ATTRIBUTES = new QQAttributesDefinition();
+	
     @Override
     protected void internalInit() {
-        this.service = new ServiceBuilder().provider(QQApi20.class).apiKey(this.key).apiSecret(this.secret)
-            .callback(this.callbackUrl).build();
+       
+    	/*this.service = new ServiceBuilder().provider(QQApi20.class).apiKey(this.key).apiSecret(this.secret)
+            .callback(this.callbackUrl).build();*/
+    	QQApi20 api = new QQApi20();
+        this.service = new QQOAuth20ServiceImpl(api, new OAuthConfig(this.key, this.secret, this.callbackUrl, SignatureType.Header, null, null),
+                this.proxyHost,this.proxyPort);
+        
     }
     
     @Override
     protected String getProfileUrl() {
-        return OAuthConstants.QQ_PROFILE_URL;
+        return PROFILE_URL;
+    }
+    
+    protected String getProfileUrl(Token token) {
+        return PROFILE_URL + "?access_token="+token.getToken()+"&oauth_consumer_key="+this.key+"";
     }
     
 	@Override
-    protected UserProfile extractUserProfile(final String body) {
-    	
-        final QQWrapperProfile userProfile = new QQWrapperProfile();
+    protected QQProfile extractUserProfile(final String body) {
+        QQProfile profile = new QQProfile();
         String str = body.replace("callback( ", "").replace(" );", "");
-        JsonNode json = JsonHelper.getFirstNode(str);
-		userProfile.setId(JsonHelper.get(json, QQWrapperProfile.ID));
-		userProfile.addAttribute(QQWrapperProfile.CLIENTID, JsonHelper.get(json, QQWrapperProfile.CLIENTID));
-        return userProfile;
-    }
-	
-	private static String getRandomStr(){
-		SimpleDateFormat formatter = new SimpleDateFormat ("MMddHHmmss");
-		Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-		String str = formatter.format(curDate);
-		String cur = str.substring(0,2);
-		String cur2 = str.substring(2,4);
-		String temp = (Integer.parseInt(cur)+Integer.parseInt(cur2))+""+str.substring(4);
-		int cur_id = Integer.parseInt(temp.substring(0,4))+Integer.parseInt(temp.substring(4));
-		String randomstr ="y" + cur_id + (int)(Math.random()*10000);
-		return randomstr;
-	}
-   
-	@SuppressWarnings({ "deprecation", "rawtypes" })
-    @Override
-    protected UserProfile getUserProfile(final Token accessToken) {
-        final String body = sendRequestForData(accessToken, getProfileUrl());
-        if (body == null) {
-            return null;
-        }
-        final UserProfile profile = extractUserProfile(body);
-        addAccessTokenToProfile(profile, accessToken);
-        String url = "https://graph.qq.com/user/get_user_info?access_token="+accessToken.getToken()+"&oauth_consumer_key="+this.key+"&openid="+profile.getId();
-        String response = getHttp(url);
-        JsonNode json = JsonHelper.getFirstNode(response);
-        String ret = json.get("ret").asText();
-        if(ret != null && ret.equals("0")){
-        	List list = jpaTemplate.find("from UserInfo where openid='"+profile.getId()+"'");
-    		UserInfo userInfo = null;
-    		if(list == null || list.isEmpty()){
-    			userInfo = new UserInfo();
-    			String nickName = json.get("nickname").asText();
-    			nickName = nickName.replaceAll("[^0-9a-zA-Z\\u4e00-\\u9fa5]", "");
-    			userInfo.setNickName(nickName);
-    			userInfo.setAvatar(json.get("figureurl_qq_1").asText());
-    			userInfo.setGender(json.get("gender").asText());
-    			userInfo.setOpenId(profile.getId());
-    			userInfo.setClientId((String)profile.getAttributes().get(QQWrapperProfile.CLIENTID));
-    			userInfo.setUserName(getRandomStr());
-    			userInfo.setCompleted(0);
-    			if(userInfo.getNickName() == null || userInfo.getNickName().equals("")){
-    				userInfo.setNickName(userInfo.getUserName());
-    			}
-    			userInfo.setCreateTime(new Date());
-    			jpaTemplate.persist(userInfo);
-    		}else{
-    			userInfo = (UserInfo) list.get(0);
-    			userInfo.setUpdateTime(new Date());
-    			jpaTemplate.merge(userInfo);
-    		}
-    		profile.setId(userInfo.getUserName());
-    		profile.addAttribute("userId",userInfo.getUserId());
-    		profile.addAttribute("userName",userInfo.getUserName());
-            profile.addAttribute("nickName",userInfo.getNickName());
-            profile.addAttribute("avatar",userInfo.getAvatar());
-            profile.addAttribute("gender",userInfo.getGender());
-            profile.addAttribute("openId",userInfo.getOpenId());
-            profile.addAttribute("clientId",userInfo.getClientId());
-            profile.addAttribute("completed",userInfo.getCompleted());
+        final JsonNode json = JsonHelper.getFirstNode(str);
+        if (null != json) {
+        	
+        	profile.setId(JsonHelper.get(json, QQProfile.ID));
+        	profile.addAttribute(QQProfile.CLIENTID, JsonHelper.get(json, QQProfile.CLIENTID));
+    		
+            for(final String attribute : QQ_ATTRIBUTES.getPrincipalAttributes()){
+                profile.addAttribute(attribute, JsonHelper.get(json, attribute));
+                if(attribute.equals("headimgurl")) {
+                    profile.addAttribute(attribute, JsonHelper.get(json, "figureurl_qq_1"));
+                }
+            }
+            /**
+             * 绑定QQ账号
+             */
+            String openId = (String) profile.getAttributes().get("openid");
+            String nickName = (String) profile.getAttributes().get("nickname");
+            /*String userName = getUserNameByOpenId(openId);
+            if (StringUtils.isNotBlank(userName)) {
+                profile.setId(userName);
+            }*/
         }
         return profile;
     }
-    
-    public static String getHttp(String url) {
-		String responseMsg = "";
-		HttpClient httpClient = new HttpClient();
-		GetMethod getMethod = new GetMethod(url);
-		getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,new DefaultHttpMethodRetryHandler());
-		try {
-			httpClient.executeMethod(getMethod);
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			InputStream in = getMethod.getResponseBodyAsStream();
-			int len = 0;
-			byte[] buf = new byte[1024];
-			while((len=in.read(buf))!=-1){
-				out.write(buf, 0, len);
-			}
-			responseMsg = out.toString("UTF-8");
-		} catch (HttpException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			//释放连接
-			getMethod.releaseConnection();
-		}
-		return responseMsg;
-	}
-    
-    public void setServerUrl(final String serverUrl) {
-        this.serverUrl = serverUrl;
+
+    @Override
+    protected String sendRequestForData(final Token accessToken, final String dataUrl) throws HttpException {
+        String getOpenIdUrl = "https://graph.qq.com/oauth2.0/me?access_token="+accessToken.getToken()+"";
+        OAuthRequest request = new OAuthRequest(Verb.GET,getOpenIdUrl);
+        if (this.connectTimeout != 0) {
+            request.setConnectTimeout(this.connectTimeout, TimeUnit.MILLISECONDS);
+        }
+        if (this.readTimeout != 0) {
+            request.setReadTimeout(this.readTimeout, TimeUnit.MILLISECONDS);
+        }
+        Response response = request.send();
+        String body = response.getBody();
+        Matcher matcher = openIdPattern.matcher(body);
+        String openid = "";
+        if(matcher.find()){
+            request = new OAuthRequest(Verb.GET,dataUrl);
+            openid = matcher.group(1);
+            request.addQuerystringParameter("openid", matcher.group(1));
+        }
+        response = request.send();
+        int code = response.getCode();
+        body = response.getBody();
+        if (code != 200) {
+            logger.error("Failed to get data, code : " + code + " / body : " + body);
+            throw new HttpException(code, body);
+        }
+        JSONObject json = JSONObject.parseObject(body);
+        json.put("openid",openid);
+        return json.toString();
     }
     
     @Override
     protected BaseOAuthProvider newProvider() {
-        final QQProvider newProvider = new QQProvider();
-        newProvider.setServerUrl(this.serverUrl);
-        return newProvider;
+        return new QQProvider();
     }
- 
     
 }
