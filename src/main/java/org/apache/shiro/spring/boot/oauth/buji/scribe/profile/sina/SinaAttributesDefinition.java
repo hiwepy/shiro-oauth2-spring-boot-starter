@@ -17,7 +17,6 @@ package org.apache.shiro.spring.boot.oauth.buji.scribe.profile.sina;
 
 import org.scribe.up.profile.OAuthAttributesDefinition;
 import org.scribe.up.profile.converter.Converters;
-import org.scribe.up.profile.github.GitHubConverters;
 
 public class SinaAttributesDefinition extends OAuthAttributesDefinition {
     
@@ -39,6 +38,7 @@ public class SinaAttributesDefinition extends OAuthAttributesDefinition {
     public static final String HTML_URL = "html_url";
     public static final String BIO = "bio";
     public static final String TOTAL_PRIVATE_REPOS = "total_private_repos";
+    // 微博创建时间 
     public static final String CREATED_AT = "created_at";
     public static final String NAME = "name";
     public static final String DISK_USAGE = "disk_usage";

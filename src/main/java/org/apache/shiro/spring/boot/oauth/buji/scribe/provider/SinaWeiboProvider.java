@@ -28,10 +28,7 @@ import org.scribe.up.provider.BaseOAuthProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
- * This class is the OAuth provider to authenticate user in CAS server wrapping OAuth protocol.
- * 
- * @author Jerome Leleu
- * @since 3.5.0
+ * http://open.weibo.com/wiki/2/statuses/user_timeline
  */
 public final class SinaWeiboProvider extends BaseOAuth20Provider {
     
