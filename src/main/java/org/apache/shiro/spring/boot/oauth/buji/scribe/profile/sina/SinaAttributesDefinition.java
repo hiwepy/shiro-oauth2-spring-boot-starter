@@ -61,8 +61,8 @@ public class SinaAttributesDefinition extends OAuthAttributesDefinition {
             addAttribute(name, Converters.integerConverter);
         }
         addAttribute(HIREABLE, Converters.booleanConverter);
-        addAttribute(CREATED_AT, GitHubConverters.dateConverter);
-        addAttribute(PLAN, GitHubConverters.planConverter);
+        addAttribute(CREATED_AT, SinaConverters.dateConverter);
+        addAttribute(PLAN, SinaConverters.planConverter);
     }
 
 }
