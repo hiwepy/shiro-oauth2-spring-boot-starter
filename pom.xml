@@ -124,6 +124,13 @@
 		    <version>${oltu.oauth2.client.version}</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/org.zalando.stups/tokens -->
+		<dependency>
+		    <groupId>org.zalando.stups</groupId>
+		    <artifactId>tokens</artifactId>
+		    <version>0.12.0-beta-2</version>
+		</dependency>
+		
 		<!-- https://github.com/vindell/spring-boot-starter-shiro-biz -->
 		<dependency>
 			<groupId>com.github.vindell</groupId>
