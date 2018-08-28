@@ -124,6 +124,5 @@ public class OltuOauth2AuthenticationFilter extends AuthenticatingFilter {
         }  
         return false;  
     }  
-}   
 
 }
