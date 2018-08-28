@@ -239,7 +239,7 @@ import io.buji.oauth.filter.OAuthUserFilter;
 	"org.apache.shiro.spring.boot.ShiroBizWebFilterConfiguration" // spring-boot-starter-shiro-biz
 })
 @ConditionalOnWebApplication
-@ConditionalOnClass({ org.scribe.up.provider.ProvidersDefinition.class, org.scribe.oauth.OAuth20ServiceImpl.class, io.buji.oauth.OAuthRealm.class })
+//@ConditionalOnClass({ org.scribe.up.provider.ProvidersDefinition.class, org.scribe.oauth.OAuth20ServiceImpl.class, io.buji.oauth.OAuthRealm.class })
 @ConditionalOnProperty(prefix = ShiroOAuth2Properties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroOAuth2Properties.class })
 public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterConfiguration implements ApplicationContextAware {
@@ -253,7 +253,7 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 	@Bean("oauth")
 	public FilterRegistrationBean oauthFilter(ShiroOAuth2Properties properties){
 		FilterRegistrationBean registration = new FilterRegistrationBean(); 
-		OAuthFilter oauthFilter = new OAuthFilter();
+		OAuth2Filter oauthFilter = new OAuth2Filter();
 		//oauthFilter.setFailureUrl(properties.getFailureUrl());
 		registration.setFilter(oauthFilter);
 	    registration.setEnabled(false); 
@@ -263,7 +263,7 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 	@Bean("user")
 	public FilterRegistrationBean userFilter(ShiroOAuth2Properties properties){
 		FilterRegistrationBean registration = new FilterRegistrationBean(); 
-		OAuthUserFilter oauthFilter = new OAuthUserFilter();
+		OAuth2UserFilter oauthFilter = new OAuth2UserFilter();
 		//oauthFilter.setFailureUrl(properties.getFailureUrl());
 		registration.setFilter(oauthFilter);
 	    registration.setEnabled(false); 
@@ -271,9 +271,9 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 	}
 	
 	@Bean
-	public ProvidersDefinition providersDefinition(List<OAuthProvider> providers) {
+	public OAuthServicesDefinition providersDefinition(List<OAuthProvider> providers) {
 		
-		ProvidersDefinition definition = new ProvidersDefinition();
+		OAuthServicesDefinition definition = new OAuthServicesDefinition();
 		
 		definition.setBaseUrl(properties.getBaseUrl());
 		definition.setProviders(providers);
@@ -296,9 +296,9 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 	
 	@Bean
 	public Realm oauthRealm(CacheManager cacheManager, PermissionResolver permissionResolver,
-			ProvidersDefinition providersDefinition, RolePermissionResolver permissionRoleResolver) {
+			OAuthServicesDefinition providersDefinition, RolePermissionResolver permissionRoleResolver) {
 		
-		OAuthRealm oauthRealm = new OAuthRealm();
+		OAuth2Realm oauthRealm = new OAuth2Realm();
 		
 		//认证缓存配置
 		oauthRealm.setAuthenticationCachingEnabled(properties.isAuthenticationCachingEnabled());

@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 	"org.apache.shiro.spring.boot.ShiroBizWebAutoConfiguration" // spring-boot-starter-shiro-biz
 })
 @ConditionalOnWebApplication
-@ConditionalOnClass({ org.scribe.up.provider.ProvidersDefinition.class, org.scribe.oauth.OAuth20ServiceImpl.class, io.buji.oauth.OAuthRealm.class })
+//@ConditionalOnClass({ org.scribe.up.provider.ProvidersDefinition.class, org.scribe.oauth.OAuth20ServiceImpl.class, io.buji.oauth.OAuthRealm.class })
 @ConditionalOnProperty(prefix = ShiroOAuth2Properties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroOAuth2Properties.class })
 public class ShiroOAuth2WebAutoConfiguration extends AbstractShiroWebConfiguration {

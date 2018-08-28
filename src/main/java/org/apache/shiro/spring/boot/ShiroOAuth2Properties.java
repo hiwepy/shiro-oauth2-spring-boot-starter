@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
-import org.scribe.up.provider.ProvidersDefinition;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(ShiroOAuth2Properties.PREFIX)
@@ -59,7 +58,7 @@ public class ShiroOAuth2Properties {
 	
     private String baseUrl;
     
-    private String providerTypeParameter = ProvidersDefinition.DEFAULT_PROVIDER_TYPE_PARAMETER;
+   // private String providerTypeParameter = ProvidersDefinition.DEFAULT_PROVIDER_TYPE_PARAMETER;
     // default roles applied to authenticated user
     private String defaultRoles;
     

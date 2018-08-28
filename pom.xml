@@ -365,12 +365,11 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-		<buji-oauth.version>1.1.0</buji-oauth.version>
 		<fastjson.version>1.2.49</fastjson.version>
 		<oltu.oauth2.client.version>1.0.2</oltu.oauth2.client.version>
+		<pac4j.version>3.1.0</pac4j.version>
+		<scribejava.version>5.5.0</scribejava.version>
 		<shiro-biz.version>1.0.0-SNAPSHOT</shiro-biz.version>
-		<scribe.version>1.3.7</scribe.version>
-		<scribe-up.version>1.3.1</scribe-up.version>
 	</properties>
 	
 	<dependencies>
@@ -432,23 +431,45 @@
 			<version>${fastjson.version}</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/io.buji/buji-oauth -->
+		<!-- https://mvnrepository.com/artifact/com.github.scribejava/scribejava-core -->
 		<dependency>
-		    <groupId>io.buji</groupId>
-		    <artifactId>buji-oauth</artifactId>
-		    <version>${buji-oauth.version}</version>
+		    <groupId>com.github.scribejava</groupId>
+		    <artifactId>scribejava-core</artifactId>
+		    <version>${scribejava.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.scribe/scribe -->
+		<!-- https://mvnrepository.com/artifact/com.github.scribejava/scribejava-apis -->
 		<dependency>
-		    <groupId>org.scribe</groupId>
-		    <artifactId>scribe</artifactId>
-		    <version>${scribe.version}</version>
+		    <groupId>com.github.scribejava</groupId>
+		    <artifactId>scribejava-apis</artifactId>
+		    <version>${scribejava.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.scribe/scribe-up -->
+		<!-- https://mvnrepository.com/artifact/com.github.scribejava/scribejava-httpclient-apache -->
 		<dependency>
-		    <groupId>org.scribe</groupId>
-		    <artifactId>scribe-up</artifactId>
-		    <version>${scribe-up.version}</version>
+			<groupId>com.github.scribejava</groupId>
+			<artifactId>scribejava-httpclient-apache</artifactId>
+			<version>${scribejava.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.scribejava/scribejava-httpclient-ahc -->
+		<!-- <dependency>
+			<groupId>com.github.scribejava</groupId>
+			<artifactId>scribejava-httpclient-ahc</artifactId>
+			<version>${scribejava.version}</version>
+			<scope>test</scope>
+		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/com.github.scribejava/scribejava-httpclient-ning -->
+		<!-- <dependency>
+			<groupId>com.github.scribejava</groupId>
+			<artifactId>scribejava-httpclient-ning</artifactId>
+			<version>${scribejava.version}</version>
+			<scope>test</scope>
+		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/com.github.scribejava/scribejava-httpclient-okhttp -->
+		<dependency>
+			<groupId>com.github.scribejava</groupId>
+			<artifactId>scribejava-httpclient-okhttp</artifactId>
+			<version>${scribejava.version}</version>
+			<scope>test</scope>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.oltu.oauth2/org.apache.oltu.oauth2.client -->
