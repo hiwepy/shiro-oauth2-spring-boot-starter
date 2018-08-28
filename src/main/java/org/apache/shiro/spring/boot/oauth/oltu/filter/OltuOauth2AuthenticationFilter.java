@@ -93,10 +93,11 @@ public class OltuOauth2AuthenticationFilter extends AuthenticatingFilter {
                 return false;
             }
         }
-
+        //执行父类里的登录逻辑，调用Subject.login登录  
         return executeLogin(request, response);
     }
 
+    //登录成功后的回调方法 重定向到成功页面  
     @Override
     protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request,
                                      ServletResponse response) throws Exception {
@@ -104,24 +105,25 @@ public class OltuOauth2AuthenticationFilter extends AuthenticatingFilter {
         return false;
     }
     
-    @Override
-    protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException ae, ServletRequest request,
-                                     ServletResponse response) {
-        Subject subject = getSubject(request, response);
-        if (subject.isAuthenticated() || subject.isRemembered()) {
-            try {
-                issueSuccessRedirect(request, response);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                WebUtils.issueRedirect(request, response, failureUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
+    //登录失败后的回调   
+    protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException ae, ServletRequest request,  
+                                     ServletResponse response) {  
+        Subject subject = getSubject(request, response);  
+        if (subject.isAuthenticated() || subject.isRemembered()) {  
+            try { //如果身份验证成功了 则也重定向到成功页面  
+                issueSuccessRedirect(request, response);  
+            } catch (Exception e) {  
+                e.printStackTrace();  
+            }  
+        } else {  
+            try { //登录失败时重定向到失败页面  
+                WebUtils.issueRedirect(request, response, failureUrl);  
+            } catch (IOException e) {  
+                e.printStackTrace();  
+            }  
+        }  
+        return false;  
+    }  
+}   
 
 }
