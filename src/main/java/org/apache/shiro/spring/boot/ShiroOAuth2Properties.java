@@ -16,34 +16,17 @@
 package org.apache.shiro.spring.boot;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.shiro.biz.web.filter.authc.AbstractCaptchaAuthenticatingFilter;
-import org.apache.shiro.biz.web.filter.authc.KickoutSessionControlFilter;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
-import org.scribe.up.provider.OAuthProvider;
 import org.scribe.up.provider.ProvidersDefinition;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(ShiroOAuth2Properties.PREFIX)
 public class ShiroOAuth2Properties {
 
-	public static final String PREFIX = "shiro";
-	
-	/**
-     * 是否校验验证码
-     */
-	protected boolean validateCaptcha = false;
-	/**
-     * 验证码在Session中存储值的key
-     */
-	protected String sessoionCaptchaKey = AbstractCaptchaAuthenticatingFilter.DEFAULT_SESSION_CAPTCHA_KEY;
-	/**
-     * Session控制过滤器使用的缓存数据对象名称
-     */
-	protected String sessionControlCacheName = KickoutSessionControlFilter.DEFAULT_SESSION_CONTROL_CACHE_NAME;
+	public static final String PREFIX = "shiro.oauth2";
 	
 	/**
 	 * Enable Shiro.
@@ -89,30 +72,6 @@ public class ShiroOAuth2Properties {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
-	}
-	
-	public boolean isValidateCaptcha() {
-		return validateCaptcha;
-	}
-
-	public void setValidateCaptcha(boolean validateCaptcha) {
-		this.validateCaptcha = validateCaptcha;
-	}
-
-	public String getSessoionCaptchaKey() {
-		return sessoionCaptchaKey;
-	}
-
-	public void setSessoionCaptchaKey(String sessoionCaptchaKey) {
-		this.sessoionCaptchaKey = sessoionCaptchaKey;
-	}
-
-	public String getSessionControlCacheName() {
-		return sessionControlCacheName;
-	}
-
-	public void setSessionControlCacheName(String sessionControlCacheName) {
-		this.sessionControlCacheName = sessionControlCacheName;
 	}
 
 	public String getAuthorizationCacheName() {

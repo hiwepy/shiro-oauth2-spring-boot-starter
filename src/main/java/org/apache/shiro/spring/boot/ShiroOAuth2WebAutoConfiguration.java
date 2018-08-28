@@ -2,10 +2,10 @@ package org.apache.shiro.spring.boot;
 
 import java.util.Map;
 
-import org.apache.commons.collections.MapUtils;
 import org.apache.shiro.spring.web.config.AbstractShiroWebConfiguration;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -39,7 +39,7 @@ public class ShiroOAuth2WebAutoConfiguration extends AbstractShiroWebConfigurati
 	protected ShiroFilterChainDefinition shiroFilterChainDefinition() {
 		DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
 		Map<String /* pattert */, String /* Chain names */> pathDefinitions = properties.getFilterChainDefinitionMap();
-		if (MapUtils.isNotEmpty(pathDefinitions)) {
+		if (!CollectionUtils.isEmpty(pathDefinitions)) {
 			chainDefinition.addPathDefinitions(pathDefinitions);
 			return chainDefinition;
 		}

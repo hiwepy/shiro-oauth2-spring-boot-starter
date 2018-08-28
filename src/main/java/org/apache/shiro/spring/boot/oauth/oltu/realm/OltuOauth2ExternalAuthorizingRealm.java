@@ -29,12 +29,12 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.biz.realm.ExternalAuthorizingRealm;
+import org.apache.shiro.biz.realm.AbstractAuthorizingRealm;
 import org.apache.shiro.spring.boot.oauth.exception.OAuth2AuthenticationException;
 import org.apache.shiro.spring.boot.oauth.oltu.token.OltuOauth2Token;
 import org.apache.shiro.subject.PrincipalCollection;
 
-public class OltuOauth2ExternalAuthorizingRealm extends ExternalAuthorizingRealm {
+public class OltuOauth2ExternalAuthorizingRealm extends AbstractAuthorizingRealm<String> {
 
     private String clientId;
     private String clientSecret;
@@ -114,12 +114,6 @@ public class OltuOauth2ExternalAuthorizingRealm extends ExternalAuthorizingRealm
             throw new OAuth2AuthenticationException(e);
         }
     }
-
-	@Override
-	protected AuthenticationInfo doGetExternalAuthenticationInfo(AuthenticationToken token) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
 
