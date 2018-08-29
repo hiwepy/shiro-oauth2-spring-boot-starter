@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth;
+package org.apache.shiro.spring.boot.oauth2;
 
 
 import org.apache.shiro.SecurityUtils;
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class ShiroUserSession implements UserSession {
     
-    private static Logger log = LoggerFactory.getLogger(OAuth2Filter.class);
+    private static Logger log = LoggerFactory.getLogger(Oauth2AuthenticationFilter.class);
     
     public void setAttribute(String key, Object value) {
         // TODO : find a better solution

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth.scribejava;
+package org.apache.shiro.spring.boot.oauth2.authc;
 
 import java.util.ArrayList;
 import java.util.List;

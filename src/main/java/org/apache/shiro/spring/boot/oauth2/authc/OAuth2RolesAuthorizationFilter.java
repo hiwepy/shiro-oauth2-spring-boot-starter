@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth.scribejava.filter;
+package org.apache.shiro.spring.boot.oauth2.authc;
 
 
 import org.apache.shiro.biz.web.filter.authz.RolesAuthorizationFilter;

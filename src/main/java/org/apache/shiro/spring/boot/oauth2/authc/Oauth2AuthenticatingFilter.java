@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth.scribejava;
+package org.apache.shiro.spring.boot.oauth2.authc;
 
 
 import java.io.IOException;
@@ -29,10 +29,6 @@ import org.apache.shiro.spring.boot.oauth.scribejava.token.OAuth2Token;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
-import org.scribe.up.credential.OAuthCredential;
-import org.scribe.up.profile.ProfileHelper;
-import org.scribe.up.provider.OAuthProvider;
-import org.scribe.up.provider.ProvidersDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,9 +42,9 @@ import com.github.scribejava.core.oauth.OAuth20Service;
  * @author Jerome Leleu
  * @since 1.0.0
  */
-public final class OAuth2Filter extends AuthenticatingFilter {
+public final class Oauth2AuthenticatingFilter extends AuthenticatingFilter {
     
-    private static Logger log = LoggerFactory.getLogger(OAuth2Filter.class);
+    private static Logger log = LoggerFactory.getLogger(Oauth2AuthenticatingFilter.class);
     
     // the url where the application is redirected if the OAuth authentication fails
     private String failureUrl;
@@ -58,7 +54,7 @@ public final class OAuth2Filter extends AuthenticatingFilter {
     
     private ShiroUserSession shiroUserSession = new ShiroUserSession();
     
-    public OAuth2Filter() {
+    public Oauth2AuthenticatingFilter() {
     }
 
     /**
@@ -74,7 +70,7 @@ public final class OAuth2Filter extends AuthenticatingFilter {
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
         Map<String, String[]> parameters = request.getParameterMap();
         
-        OAuth2AccessToken accessToken =  getOauth20Service().getAccessToken(code)
+        OAuth2AccessToken accessToken =  getOauth20Service().getAccessToken(code);
         log.debug("accessToken : {}", accessToken);
         return new OAuth2Token(accessToken);
     }

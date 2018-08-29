@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth.scribejava.realm;
+package org.apache.shiro.spring.boot.oauth2.realm;
 
 
 import java.util.ArrayList;
@@ -32,8 +32,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
 import org.apache.shiro.util.StringUtils;
-import org.scribe.up.profile.UserProfile;
-import org.scribe.up.provider.OAuthProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -253,7 +253,7 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 	@Bean("oauth")
 	public FilterRegistrationBean oauthFilter(ShiroOAuth2Properties properties){
 		FilterRegistrationBean registration = new FilterRegistrationBean(); 
-		OAuth2Filter oauthFilter = new OAuth2Filter();
+		Oauth2AuthenticationFilter oauthFilter = new Oauth2AuthenticationFilter();
 		//oauthFilter.setFailureUrl(properties.getFailureUrl());
 		registration.setFilter(oauthFilter);
 	    registration.setEnabled(false); 
