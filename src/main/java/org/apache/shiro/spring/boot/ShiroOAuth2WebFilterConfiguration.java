@@ -17,12 +17,10 @@ import org.apache.shiro.biz.web.filter.authc.listener.LoginListener;
 import org.apache.shiro.biz.web.filter.authc.listener.LogoutListener;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.spring.boot.oauth.ShiroOAuth2FilterFactoryBean;
+import org.apache.shiro.spring.boot.oauth1.ShiroOAuth2FilterFactoryBean;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.AbstractShiroWebFilterConfiguration;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
-import org.scribe.up.provider.OAuthProvider;
-import org.scribe.up.provider.ProvidersDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -263,7 +261,7 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 	@Bean("user")
 	public FilterRegistrationBean userFilter(ShiroOAuth2Properties properties){
 		FilterRegistrationBean registration = new FilterRegistrationBean(); 
-		OAuth2UserFilter oauthFilter = new OAuth2UserFilter();
+		OAuthUserFilter oauthFilter = new OAuthUserFilter();
 		//oauthFilter.setFailureUrl(properties.getFailureUrl());
 		registration.setFilter(oauthFilter);
 	    registration.setEnabled(false); 
@@ -298,7 +296,7 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 	public Realm oauthRealm(CacheManager cacheManager, PermissionResolver permissionResolver,
 			OAuthServicesDefinition providersDefinition, RolePermissionResolver permissionRoleResolver) {
 		
-		OAuth2Realm oauthRealm = new OAuth2Realm();
+		OAuthRealm oauthRealm = new OAuthRealm();
 		
 		//认证缓存配置
 		oauthRealm.setAuthenticationCachingEnabled(properties.isAuthenticationCachingEnabled());

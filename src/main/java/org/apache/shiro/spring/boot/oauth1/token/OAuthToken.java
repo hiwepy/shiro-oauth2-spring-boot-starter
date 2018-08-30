@@ -13,29 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth2.token;
+package org.apache.shiro.spring.boot.oauth1.token;
 
 
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.HostAuthenticationToken;
 
-import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.github.scribejava.core.model.OAuth1AccessToken;
 
 /**
  * This class represents a token for an OAuth authentication process (OAuth credential + user identifier after authentication).
  */
-public final class OAuth2Token implements AuthenticationToken, HostAuthenticationToken {
+public final class OAuthToken implements AuthenticationToken, HostAuthenticationToken {
     
     private static final long serialVersionUID = 3376624432421737333L;
     
     // 客户端IP
  	private String host;
  	
-    private OAuth2AccessToken credential;
+    private OAuth1AccessToken credential;
     
     private String userId;
     
-    public OAuth2Token(String host, OAuth2AccessToken credential) {
+    public OAuthToken(String host, OAuth1AccessToken credential) {
     	this.host = host;
         this.credential = credential;
     }

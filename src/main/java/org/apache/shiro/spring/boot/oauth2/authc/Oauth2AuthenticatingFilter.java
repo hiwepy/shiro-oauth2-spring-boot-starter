@@ -17,17 +17,16 @@ package org.apache.shiro.spring.boot.oauth2.authc;
 
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.spring.boot.oauth.ShiroUserSession;
-import org.apache.shiro.spring.boot.oauth.scribejava.token.OAuth2Token;
+import org.apache.shiro.biz.web.filter.authc.AbstractAuthenticatingFilter;
+import org.apache.shiro.spring.boot.oauth2.token.OAuth2Token;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,26 +36,31 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 
 /**
  * This filter retrieves OAuth credential after user authenticates at the OAuth provider to create an OAuthToken to finish the OAuth
- * authentication process and retrieve the user profile.
+ * authentication process and retrieve the user profile. <br/>
  * 
- * @author Jerome Leleu
- * @since 1.0.0
+ * https://github.com/scribejava/scribejava  <br/>
+ * https://github.com/scribejava/scribejava/wiki/getting-started
  */
-public final class Oauth2AuthenticatingFilter extends AuthenticatingFilter {
+public final class Oauth2AuthenticatingFilter extends AbstractAuthenticatingFilter {
     
-    private static Logger log = LoggerFactory.getLogger(Oauth2AuthenticatingFilter.class);
-    
+	private static final Logger LOG = LoggerFactory.getLogger(Oauth2AuthenticatingFilter.class);
+	
     // the url where the application is redirected if the OAuth authentication fails
     private String failureUrl;
     
     // the OAuth20Service
     private OAuth20Service oauth20Service;;
     
-    private ShiroUserSession shiroUserSession = new ShiroUserSession();
+    /**
+     * HTTP Authorization Parameter, equal to <code>code</code>
+     */
+    protected static final String AUTHORIZATION_PARAMERTER = "code";
+    
+    private String authorizationParameterName = AUTHORIZATION_PARAMERTER;
     
     public Oauth2AuthenticatingFilter() {
     }
-
+    
     /**
      * The token created for this authentication is an OAuthToken containing the OAuth credential received after authentication at the OAuth
      * provider. These information are received on the callback url (on which the filter must be configured).
@@ -65,14 +69,12 @@ public final class Oauth2AuthenticatingFilter extends AuthenticatingFilter {
      * @param response the outgoing response
      * @throws Exception if there is an error processing the request.
      */
-    @SuppressWarnings("unchecked")
 	@Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
-        Map<String, String[]> parameters = request.getParameterMap();
-        
-        OAuth2AccessToken accessToken =  getOauth20Service().getAccessToken(code);
-        log.debug("accessToken : {}", accessToken);
-        return new OAuth2Token(accessToken);
+        String host = getHost(request);
+        OAuth2AccessToken accessToken =  getOauth20Service().getAccessToken(getAuthzParameter(request));
+        LOG.debug("accessToken : {}", accessToken);
+        return new OAuth2Token(host, accessToken);
     }
     
     /**
@@ -85,7 +87,23 @@ public final class Oauth2AuthenticatingFilter extends AuthenticatingFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        return executeLogin(request, response);
+    	
+    	Subject subject = getSubject(request, response);
+		if ((null == subject || !subject.isAuthenticated()) && isOauth2Submission(request, response)) {
+			AuthenticationToken token = createToken(request, response);
+			try {
+				subject.login(token);
+				return true;
+			} catch (AuthenticationException e) {
+				LOG.error("Host {} Oauth2 Authentication Exception : {}", getHost(request), e.getMessage());
+				saveRequestAndRedirectToLogin(request, response);
+				return false;
+			}
+		}
+		//如果用户没有身份验证，且没有auth code，则重定向到服务端授权    	
+    	saveRequestAndRedirectToLogin(request, response);
+		return false;
+		
     }
     
     /**
@@ -113,7 +131,7 @@ public final class Oauth2AuthenticatingFilter extends AuthenticatingFilter {
     @Override
     protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request,
                                      ServletResponse response) throws Exception {
-        issueSuccessRedirect(request, response);
+    	issueSuccessRedirect(request, response);
         return false;
     }
     
@@ -131,21 +149,39 @@ public final class Oauth2AuthenticatingFilter extends AuthenticatingFilter {
                                      ServletResponse response) {
         // is user authenticated ?
         Subject subject = getSubject(request, response);
-        if (subject.isAuthenticated()) {
-            try {
-                issueSuccessRedirect(request, response);
-            } catch (Exception e) {
-                log.error("Cannot redirect to the default success url", e);
-            }
-        } else {
-            try {
-                WebUtils.issueRedirect(request, response, failureUrl);
-            } catch (IOException e) {
-                log.error("Cannot redirect to failure url : {}", failureUrl, e);
-            }
-        }
+        if (subject.isAuthenticated() || subject.isRemembered()) {
+			try {
+				//如果身份验证成功了 则也重定向到成功页面  
+				issueSuccessRedirect(request, response);
+			} catch (Exception e) {
+				LOG.error("Cannot redirect to the default success url", e);
+			}
+		} else {
+			try {
+				//登录失败时重定向到失败页面  
+				WebUtils.issueRedirect(request, response, failureUrl);
+			} catch (IOException e) {
+				LOG.error("Cannot redirect to failure url : {}", failureUrl, e);
+			}
+		}
         return false;
     }
+    
+    @Override
+    public String getLoginUrl() {
+        return getOauth20Service().getAuthorizationUrl();
+    }
+    
+    protected boolean isOauth2Submission(ServletRequest request, ServletResponse response) {
+   	 String authzHeader = getAuthzParameter(request);
+		return (request instanceof HttpServletRequest) && authzHeader != null;
+	}
+
+   protected String getAuthzParameter(ServletRequest request) {
+       HttpServletRequest httpRequest = WebUtils.toHttp(request);
+       return httpRequest.getParameter(getAuthorizationParameterName());
+   }
+
     
     public void setFailureUrl(String failureUrl) {
         this.failureUrl = failureUrl;
@@ -158,5 +194,15 @@ public final class Oauth2AuthenticatingFilter extends AuthenticatingFilter {
 	public void setOauth20Service(OAuth20Service oauth20Service) {
 		this.oauth20Service = oauth20Service;
 	}
+
+	public String getAuthorizationParameterName() {
+		return authorizationParameterName;
+	}
+
+	public void setAuthorizationParameterName(String authorizationParameterName) {
+		this.authorizationParameterName = authorizationParameterName;
+	}
     
+	
+	
 }

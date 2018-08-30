@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth2.realm;
+package org.apache.shiro.spring.boot.oauth1.realm;
 
 
 import java.util.ArrayList;
@@ -36,9 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
 /**
@@ -48,9 +45,9 @@ import com.github.scribejava.core.oauth.OAuth20Service;
  * @author Jerome Leleu
  * @since 1.0.0
  */
-public class OAuth2Realm extends AuthorizingRealm {
+public class OAuthRealm extends AuthorizingRealm {
     
-    private static Logger log = LoggerFactory.getLogger(OAuth2Realm.class);
+    private static Logger log = LoggerFactory.getLogger(OAuthRealm.class);
     
     // the OAuth20Service
     private OAuth20Service oauth20Service;;
@@ -61,10 +58,7 @@ public class OAuth2Realm extends AuthorizingRealm {
     // default permissions applied to authenticated user
     private String defaultPermissions;
     
-    // the url where the application is redirected if the OAuth authentication fails
- 	private String permsUrl;
-    
-    public OAuth2Realm() {
+    public OAuthRealm() {
         setAuthenticationTokenClass(OAuth2Token.class);
     }
     
@@ -77,7 +71,6 @@ public class OAuth2Realm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authenticationToken)
         throws AuthenticationException {
-    	
         final OAuth2Token oauthToken = (OAuth2Token) authenticationToken;
         log.debug("oauthToken : {}", oauthToken);
         // token must be provided
@@ -92,15 +85,7 @@ public class OAuth2Realm extends AuthorizingRealm {
         if (credential == null) {
             return null;
         }
-        
-        
-        final OAuthRequest request = new OAuthRequest(Verb.GET, permsUrl);
-        getOauth20Service().signRequest(credential, request);
-        final Response response = getOauth20Service().execute(request);
 
-        response.getBody();
-        /*
-        
         // OAuth provider
         OAuthProvider provider = providersDefinition.findProvider(credential.getProviderType());
         log.debug("provider : {}", provider);
@@ -116,7 +101,7 @@ public class OAuth2Realm extends AuthorizingRealm {
             log.error("Unable to get user profile for OAuth credentials : [{}]", credential);
             throw new OAuthAuthenticationException("Unable to get user profile for OAuth credential : [" + credential
                                                    + "]");
-        }*/
+        }
         
         // refresh authentication token with user id
         final String userId = userProfile.getTypedId();

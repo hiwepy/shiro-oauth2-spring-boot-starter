@@ -13,32 +13,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.oauth2.authc;
+package org.apache.shiro.spring.boot.oauth2.authz;
 
 
-
-import org.apache.shiro.biz.web.filter.authz.PermissionsAuthorizationFilter;
+import org.apache.shiro.biz.web.filter.authz.RolesAuthorizationFilter;
 
 import com.github.scribejava.core.oauth.OAuth20Service;
 
 /**
- * This class specializes the PermissionsAuthorizationFilter to have a login url which is the authorization url of the OAuth provider.
+ * This class specializes the RolesAuthorizationFilter to have a login url which is the authorization url of the OAuth provider.
  */
-public final class OAuth2PermissionsAuthorizationFilter extends PermissionsAuthorizationFilter {
+public final class OAuth2RolesAuthorizationFilter extends RolesAuthorizationFilter {
     
 	private OAuth20Service oauth20Service;
-    
+	
 	@Override
     public String getLoginUrl() {
         return getOauth20Service().getAuthorizationUrl();
     }
-    
-    public OAuth20Service getOauth20Service() {
+
+	public OAuth20Service getOauth20Service() {
 		return oauth20Service;
 	}
 
 	public void setOauth20Service(OAuth20Service oauth20Service) {
 		this.oauth20Service = oauth20Service;
 	}
-	
+    
 }
+
