@@ -247,14 +247,6 @@ public class ShiroOAuth2Properties {
 		this.baseUrl = baseUrl;
 	}
     
-	public String getProviderTypeParameter() {
-		return providerTypeParameter;
-	}
-
-	public void setProviderTypeParameter(String providerTypeParameter) {
-		this.providerTypeParameter = providerTypeParameter;
-	}
-
 	public String getDefaultRoles() {
 		return defaultRoles;
 	}

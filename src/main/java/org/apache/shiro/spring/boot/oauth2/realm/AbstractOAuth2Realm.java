@@ -26,7 +26,8 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.spring.boot.oauth.exception.OAuthAuthenticationException;
+import org.apache.shiro.spring.boot.oauth2.UserProfile;
+import org.apache.shiro.spring.boot.oauth2.exception.OAuth2AuthenticationException;
 import org.apache.shiro.spring.boot.oauth2.token.OAuth2Token;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
@@ -36,21 +37,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
 /**
- * This realm implementation is dedicated to OAuth2 authentication. It acts on OAuth credential after user authenticates at the OAuth
- * provider (Facebook, Twitter...) and finishes the OAuth2 authentication process by getting the user profile from the OAuth provider.
- * 
- * @author Jerome Leleu
- * @since 1.0.0
+ * This realm implementation is dedicated to OAuth2 authentication. 
  */
-public class OAuth2Realm extends AuthorizingRealm {
+public abstract class AbstractOAuth2Realm extends AuthorizingRealm {
     
-    private static Logger log = LoggerFactory.getLogger(OAuth2Realm.class);
+    private static Logger log = LoggerFactory.getLogger(AbstractOAuth2Realm.class);
     
     // the OAuth20Service
     private OAuth20Service oauth20Service;;
@@ -61,10 +55,7 @@ public class OAuth2Realm extends AuthorizingRealm {
     // default permissions applied to authenticated user
     private String defaultPermissions;
     
-    // the url where the application is redirected if the OAuth authentication fails
- 	private String permsUrl;
-    
-    public OAuth2Realm() {
+    public AbstractOAuth2Realm() {
         setAuthenticationTokenClass(OAuth2Token.class);
     }
     
@@ -93,30 +84,14 @@ public class OAuth2Realm extends AuthorizingRealm {
             return null;
         }
         
-        
-        final OAuthRequest request = new OAuthRequest(Verb.GET, permsUrl);
-        getOauth20Service().signRequest(credential, request);
-        final Response response = getOauth20Service().execute(request);
-
-        response.getBody();
-        /*
-        
-        // OAuth provider
-        OAuthProvider provider = providersDefinition.findProvider(credential.getProviderType());
-        log.debug("provider : {}", provider);
-        // no provider found
-        if (provider == null) {
-            return null;
-        }
-        
         // finish OAuth authentication process : get the user profile
-         UserProfile userProfile = provider.getUserProfile(credential);
+        UserProfile userProfile = this.getUserProfile(credential);
         log.debug("userProfile : {}", userProfile);
         if (userProfile == null || !StringUtils.hasText(userProfile.getId())) {
             log.error("Unable to get user profile for OAuth credentials : [{}]", credential);
-            throw new OAuthAuthenticationException("Unable to get user profile for OAuth credential : [" + credential
+            throw new OAuth2AuthenticationException("Unable to get user profile for OAuth credential : [" + credential
                                                    + "]");
-        }*/
+        }
         
         // refresh authentication token with user id
         final String userId = userProfile.getTypedId();
@@ -126,6 +101,8 @@ public class OAuth2Realm extends AuthorizingRealm {
         final PrincipalCollection principalCollection = new SimplePrincipalCollection(principals, getName());
         return new SimpleAuthenticationInfo(principalCollection, credential);
     }
+    
+    public abstract UserProfile getUserProfile(OAuth2AccessToken credential);
     
     /**
      * Retrieves the AuthorizationInfo for the given principals.
@@ -178,4 +155,5 @@ public class OAuth2Realm extends AuthorizingRealm {
     public void setDefaultPermissions(final String defaultPermissions) {
         this.defaultPermissions = defaultPermissions;
     }
+    
 }

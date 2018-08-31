@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
 import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.authz.permission.RolePermissionResolver;
 import org.apache.shiro.authz.permission.WildcardPermissionResolver;
@@ -15,18 +14,15 @@ import org.apache.shiro.biz.web.filter.HttpServletSessionExpiredFilter;
 import org.apache.shiro.biz.web.filter.authc.AbstractLogoutFilter;
 import org.apache.shiro.biz.web.filter.authc.listener.LoginListener;
 import org.apache.shiro.biz.web.filter.authc.listener.LogoutListener;
-import org.apache.shiro.cache.CacheManager;
-import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.boot.oauth1.ShiroOAuth2FilterFactoryBean;
+import org.apache.shiro.spring.boot.oauth2.authc.OAuth2UserFilter;
+import org.apache.shiro.spring.boot.oauth2.authz.OAuth2AuthorizationFilter;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.AbstractShiroWebFilterConfiguration;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -38,10 +34,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.util.ObjectUtils;
-
-import io.buji.oauth.OAuthFilter;
-import io.buji.oauth.OAuthRealm;
-import io.buji.oauth.filter.OAuthUserFilter;
 
 
 /**
@@ -242,42 +234,28 @@ import io.buji.oauth.filter.OAuthUserFilter;
 @EnableConfigurationProperties({ ShiroOAuth2Properties.class })
 public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterConfiguration implements ApplicationContextAware {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ShiroOAuth2WebFilterConfiguration.class);
+	//private static final Logger LOG = LoggerFactory.getLogger(ShiroOAuth2WebFilterConfiguration.class);
 	private ApplicationContext applicationContext;
 	
 	@Autowired
 	private ShiroOAuth2Properties properties;
 	
-	@Bean("oauth")
-	public FilterRegistrationBean oauthFilter(ShiroOAuth2Properties properties){
-		FilterRegistrationBean registration = new FilterRegistrationBean(); 
-		Oauth2AuthenticationFilter oauthFilter = new Oauth2AuthenticationFilter();
-		//oauthFilter.setFailureUrl(properties.getFailureUrl());
+	@Bean("oauth2")
+	public FilterRegistrationBean<OAuth2AuthorizationFilter> oauthFilter(ShiroOAuth2Properties properties){
+		FilterRegistrationBean<OAuth2AuthorizationFilter> registration = new FilterRegistrationBean<OAuth2AuthorizationFilter>(); 
+		OAuth2AuthorizationFilter oauthFilter = new OAuth2AuthorizationFilter();
 		registration.setFilter(oauthFilter);
 	    registration.setEnabled(false); 
 	    return registration;
 	}
 	
 	@Bean("user")
-	public FilterRegistrationBean userFilter(ShiroOAuth2Properties properties){
-		FilterRegistrationBean registration = new FilterRegistrationBean(); 
-		OAuthUserFilter oauthFilter = new OAuthUserFilter();
-		//oauthFilter.setFailureUrl(properties.getFailureUrl());
+	public FilterRegistrationBean<OAuth2UserFilter> userFilter(ShiroOAuth2Properties properties){
+		FilterRegistrationBean<OAuth2UserFilter> registration = new FilterRegistrationBean<OAuth2UserFilter>(); 
+		OAuth2UserFilter oauthFilter = new OAuth2UserFilter();
 		registration.setFilter(oauthFilter);
 	    registration.setEnabled(false); 
 	    return registration;
-	}
-	
-	@Bean
-	public OAuthServicesDefinition providersDefinition(List<OAuthProvider> providers) {
-		
-		OAuthServicesDefinition definition = new OAuthServicesDefinition();
-		
-		definition.setBaseUrl(properties.getBaseUrl());
-		definition.setProviders(providers);
-		definition.setProviderTypeParameter(properties.getProviderTypeParameter());
-		
-		return definition;
 	}
 	
 	@Bean
@@ -292,9 +270,9 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 		return new AdminRolePermissionResolver();
 	}
 	
-	@Bean
+	/*@Bean
 	public Realm oauthRealm(CacheManager cacheManager, PermissionResolver permissionResolver,
-			OAuthServicesDefinition providersDefinition, RolePermissionResolver permissionRoleResolver) {
+			RolePermissionResolver permissionRoleResolver) {
 		
 		OAuthRealm oauthRealm = new OAuthRealm();
 		
@@ -315,11 +293,10 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 		oauthRealm.setDefaultRoles(properties.getDefaultRoles());
 		
 		oauthRealm.setPermissionResolver(permissionResolver);
-		oauthRealm.setProvidersDefinition(providersDefinition);
 		oauthRealm.setRolePermissionResolver(permissionRoleResolver);
 		
 		return oauthRealm;
-	}
+	}*/
 	
 	/**
 	 * 登录监听：实现该接口可监听账号登录失败和成功的状态，从而做业务系统自己的事情，比如记录日志

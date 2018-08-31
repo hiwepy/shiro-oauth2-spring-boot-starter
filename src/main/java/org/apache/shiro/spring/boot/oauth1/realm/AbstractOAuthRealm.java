@@ -26,7 +26,9 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.spring.boot.oauth.exception.OAuthAuthenticationException;
+import org.apache.shiro.spring.boot.oauth1.exception.OAuthAuthenticationException;
+import org.apache.shiro.spring.boot.oauth1.token.OAuthToken;
+import org.apache.shiro.spring.boot.oauth2.UserProfile;
 import org.apache.shiro.spring.boot.oauth2.token.OAuth2Token;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
@@ -35,19 +37,15 @@ import org.apache.shiro.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
 /**
- * This realm implementation is dedicated to OAuth2 authentication. It acts on OAuth credential after user authenticates at the OAuth
- * provider (Facebook, Twitter...) and finishes the OAuth2 authentication process by getting the user profile from the OAuth provider.
- * 
- * @author Jerome Leleu
- * @since 1.0.0
+ * This realm implementation is dedicated to OAuth authentication. 
  */
-public class OAuthRealm extends AuthorizingRealm {
+public abstract class AbstractOAuthRealm extends AuthorizingRealm {
     
-    private static Logger log = LoggerFactory.getLogger(OAuthRealm.class);
+    private static Logger log = LoggerFactory.getLogger(AbstractOAuthRealm.class);
     
     // the OAuth20Service
     private OAuth20Service oauth20Service;;
@@ -58,7 +56,7 @@ public class OAuthRealm extends AuthorizingRealm {
     // default permissions applied to authenticated user
     private String defaultPermissions;
     
-    public OAuthRealm() {
+    public AbstractOAuthRealm() {
         setAuthenticationTokenClass(OAuth2Token.class);
     }
     
@@ -71,7 +69,7 @@ public class OAuthRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authenticationToken)
         throws AuthenticationException {
-        final OAuth2Token oauthToken = (OAuth2Token) authenticationToken;
+        final OAuthToken oauthToken = (OAuthToken) authenticationToken;
         log.debug("oauthToken : {}", oauthToken);
         // token must be provided
         if (oauthToken == null) {
@@ -79,23 +77,15 @@ public class OAuthRealm extends AuthorizingRealm {
         }
         
         // OAuth credential
-        final OAuth2AccessToken credential = (OAuth2AccessToken) oauthToken.getCredentials();
+        final OAuth1AccessToken credential = (OAuth1AccessToken) oauthToken.getCredentials();
         log.debug("credential : {}", credential);
         // credential should be not null
         if (credential == null) {
             return null;
         }
 
-        // OAuth provider
-        OAuthProvider provider = providersDefinition.findProvider(credential.getProviderType());
-        log.debug("provider : {}", provider);
-        // no provider found
-        if (provider == null) {
-            return null;
-        }
-        
         // finish OAuth authentication process : get the user profile
-         UserProfile userProfile = provider.getUserProfile(credential);
+         UserProfile userProfile = this.getUserProfile(credential);
         log.debug("userProfile : {}", userProfile);
         if (userProfile == null || !StringUtils.hasText(userProfile.getId())) {
             log.error("Unable to get user profile for OAuth credentials : [{}]", credential);
@@ -111,6 +101,8 @@ public class OAuthRealm extends AuthorizingRealm {
         final PrincipalCollection principalCollection = new SimplePrincipalCollection(principals, getName());
         return new SimpleAuthenticationInfo(principalCollection, credential);
     }
+    
+    public abstract UserProfile getUserProfile(OAuth1AccessToken credential);
     
     /**
      * Retrieves the AuthorizationInfo for the given principals.

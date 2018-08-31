@@ -20,8 +20,20 @@ import org.apache.shiro.authc.AuthenticationException;
 @SuppressWarnings("serial")
 public class OAuth2AuthenticationException extends AuthenticationException {
 
+	public OAuth2AuthenticationException() {
+        super();
+    }
+    
+    public OAuth2AuthenticationException(String message) {
+        super(message);
+    }
+    
     public OAuth2AuthenticationException(Throwable cause) {
         super(cause);
+    }
+    
+    public OAuth2AuthenticationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }
 
