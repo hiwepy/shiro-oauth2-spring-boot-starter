@@ -222,6 +222,8 @@ import org.springframework.util.ObjectUtils;
  * 自定义Filter通过@Bean注解后，被Spring Boot自动注册到了容器的Filter chain中，这样导致的结果是，所有URL都会被自定义Filter过滤，而不是Shiro中配置的一部分URL。
  * https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-disable-registration-of-a-servlet-or-filter
  * http://www.jianshu.com/p/bf79fdab9c19
+ * https://www.cnblogs.com/wxy540843763/p/7675946.html
+ * http://jinnianshilongnian.iteye.com/blog/2038646
  */
 @Configuration
 @AutoConfigureBefore( name = {
