@@ -17,6 +17,7 @@ package org.apache.shiro.spring.boot.oauth2.authc;
 
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.biz.web.filter.authc.AbstractAuthenticatingFilter;
+import org.apache.shiro.spring.boot.oauth2.exception.OAuth2AuthenticationException;
 import org.apache.shiro.spring.boot.oauth2.token.OAuth2Token;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
@@ -67,14 +69,20 @@ public final class Oauth2AuthenticatingFilter extends AbstractAuthenticatingFilt
      * 
      * @param request the incoming request
      * @param response the outgoing response
-     * @throws Exception if there is an error processing the request.
      */
 	@Override
-    protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
-        String host = getHost(request);
-        OAuth2AccessToken accessToken =  getOauth20Service().getAccessToken(getAuthzParameter(request));
-        LOG.debug("accessToken : {}", accessToken);
-        return new OAuth2Token(host, accessToken);
+    protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
+		try {
+			OAuth2AccessToken accessToken = getOauth20Service().getAccessToken(getAuthzCode(request));
+			LOG.debug("accessToken : {}", accessToken);
+	        return new OAuth2Token(getHost(request), accessToken);
+		} catch (IOException e) {
+			throw new OAuth2AuthenticationException(e);
+		} catch (InterruptedException e) {
+			throw new OAuth2AuthenticationException(e);
+		} catch (ExecutionException e) {
+			throw new OAuth2AuthenticationException(e);
+		}
     }
     
     /**
@@ -173,11 +181,11 @@ public final class Oauth2AuthenticatingFilter extends AbstractAuthenticatingFilt
     }
     
     protected boolean isOauth2Submission(ServletRequest request, ServletResponse response) {
-   	 String authzHeader = getAuthzParameter(request);
+   	 String authzHeader = getAuthzCode(request);
 		return (request instanceof HttpServletRequest) && authzHeader != null;
 	}
 
-   protected String getAuthzParameter(ServletRequest request) {
+   protected String getAuthzCode(ServletRequest request) {
        HttpServletRequest httpRequest = WebUtils.toHttp(request);
        return httpRequest.getParameter(getAuthorizationParameterName());
    }

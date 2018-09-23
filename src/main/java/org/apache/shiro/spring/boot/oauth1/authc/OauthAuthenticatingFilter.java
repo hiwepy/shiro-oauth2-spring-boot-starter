@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.biz.web.filter.authc.AbstractAuthenticatingFilter;
+import org.apache.shiro.spring.boot.oauth1.exception.OAuthAuthenticationException;
 import org.apache.shiro.spring.boot.oauth1.token.OAuthToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
@@ -70,26 +71,28 @@ public final class OauthAuthenticatingFilter extends AbstractAuthenticatingFilte
 	 * information are received on the callback url (on which the filter must be
 	 * configured).
 	 * 
-	 * @param request
-	 *            the incoming request
-	 * @param response
-	 *            the outgoing response
-	 * @throws Exception
-	 *             if there is an error processing the request.
+	 * @param request the incoming request
+	 * @param response the outgoing response
 	 */
 	@Override
-	protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
-
-		String host = getHost(request);
-
-		// Step 1: Get the request token
-		OAuth1RequestToken requestToken = getOauth10Service().getRequestToken();
-
-		// Step 2: Get the access Token
-		OAuth1AccessToken accessToken = getOauth10Service().getAccessToken(requestToken, getAuthzParameter(request));
-		LOG.debug("accessToken : {}", accessToken);
-
-		return new OAuthToken(host, accessToken);
+	protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
+		try {
+			
+			// Step 1: Get the request token
+			OAuth1RequestToken requestToken = getOauth10Service().getRequestToken();
+	
+			// Step 2: Get the access Token
+			OAuth1AccessToken accessToken = getOauth10Service().getAccessToken(requestToken, getAuthzParameter(request));
+			LOG.debug("accessToken : {}", accessToken);
+			
+			return new OAuthToken(getHost(request), accessToken);
+		} catch (IOException e) {
+			throw new OAuthAuthenticationException(e);
+		} catch (InterruptedException e) {
+			throw new OAuthAuthenticationException(e);
+		} catch (ExecutionException e) {
+			throw new OAuthAuthenticationException(e);
+		}
 	}
 
 	/**
@@ -97,12 +100,9 @@ public final class OauthAuthenticatingFilter extends AbstractAuthenticatingFilte
 	 * {@link #createToken(javax.servlet.ServletRequest, javax.servlet.ServletResponse)
 	 * token} and logging subject with this token.
 	 * 
-	 * @param request
-	 *            the incoming request
-	 * @param response
-	 *            the outgoing response
-	 * @throws Exception
-	 *             if there is an error processing the request.
+	 * @param request the incoming request
+	 * @param response the outgoing response
+	 * @throws Exception if there is an error processing the request.
 	 */
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
