@@ -1,39 +1,18 @@
 package org.apache.shiro.spring.boot;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.shiro.authz.permission.PermissionResolver;
-import org.apache.shiro.authz.permission.RolePermissionResolver;
-import org.apache.shiro.authz.permission.WildcardPermissionResolver;
-import org.apache.shiro.biz.authz.permission.AdminRolePermissionResolver;
-import org.apache.shiro.biz.web.filter.HttpServletSessionExpiredFilter;
-import org.apache.shiro.biz.web.filter.authc.AbstractLogoutFilter;
-import org.apache.shiro.biz.web.filter.authc.listener.LoginListener;
-import org.apache.shiro.biz.web.filter.authc.listener.LogoutListener;
-import org.apache.shiro.spring.boot.oauth1.ShiroOAuth2FilterFactoryBean;
 import org.apache.shiro.spring.boot.oauth2.authc.OAuth2UserFilter;
 import org.apache.shiro.spring.boot.oauth2.authz.OAuth2AuthorizationFilter;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.AbstractShiroWebFilterConfiguration;
-import org.apache.shiro.web.servlet.AbstractShiroFilter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.util.ObjectUtils;
 
 
 /**
@@ -257,18 +236,6 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 		registration.setFilter(oauthFilter);
 	    registration.setEnabled(false); 
 	    return registration;
-	}
-	
-	@Bean
-	@ConditionalOnMissingBean
-	public PermissionResolver permissionResolver() {
-		return new WildcardPermissionResolver();
-	}
-	
-	@Bean
-	@ConditionalOnMissingBean
-	public RolePermissionResolver permissionRoleResolver() {
-		return new AdminRolePermissionResolver();
 	}
 	
 	/*@Bean
