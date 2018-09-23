@@ -230,7 +230,6 @@ import org.springframework.util.ObjectUtils;
 	"org.apache.shiro.spring.config.web.autoconfigure.ShiroWebFilterConfiguration",  // shiro-spring-boot-web-starter
 	"org.apache.shiro.spring.boot.ShiroBizWebFilterConfiguration" // spring-boot-starter-shiro-biz
 })
-@ConditionalOnWebApplication
 //@ConditionalOnClass({ org.scribe.up.provider.ProvidersDefinition.class, org.scribe.oauth.OAuth20ServiceImpl.class, io.buji.oauth.OAuthRealm.class })
 @ConditionalOnProperty(prefix = ShiroOAuth2Properties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroOAuth2Properties.class })
