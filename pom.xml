@@ -368,7 +368,7 @@
 		<fastjson.version>1.2.51</fastjson.version>
 		<pac4j.version>3.2.0</pac4j.version>
 		<scribejava.version>5.6.0</scribejava.version>
-		<shiro-biz.version>1.0.0-SNAPSHOT</shiro-biz.version>
+		<spring-boot-starter-shiro-biz.version>1.0.1.RELEASE</spring-boot-starter-shiro-biz.version>
 	</properties>
 	
 	<dependencies>
@@ -482,7 +482,7 @@
 		<dependency>
 			<groupId>com.github.vindell</groupId>
 			<artifactId>spring-boot-starter-shiro-biz</artifactId>
-			<version>${shiro-biz.version}</version>
+			<version>${spring-boot-starter-shiro-biz.version}</version>
 		</dependency>
 		
 	</dependencies>
