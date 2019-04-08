@@ -14,9 +14,13 @@ public class QQExample {
 
 		final String apiKey = "101303927";
 		final String apiSecret = "0c3ac6430d6e2f60dfb637101252417e ";
-		final OAuth20Service service = new ServiceBuilder(null).apiKey(apiKey).apiSecret(apiSecret)
-				.callback("http://www.yichisancun.com/qqlogin.htm").state("xxxx")
-				.scope("get_user_info,list_album,upload_pic,do_like").build(QQApi20.instance());
+		final OAuth20Service service = new ServiceBuilder(null)
+				.apiKey(apiKey)
+				.apiSecret(apiSecret)
+				.callback("http://www.yichisancun.com/qqlogin.htm")
+				.defaultScope("get_user_info,list_album,upload_pic,do_like")
+				.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0")
+				.build(QQApi20.instance());
 
 		System.out.println(service.getAuthorizationUrl());
 	}

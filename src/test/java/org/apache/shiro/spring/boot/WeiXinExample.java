@@ -14,8 +14,12 @@ public class WeiXinExample {
 
 		final String apiKey = "x";
 		final String apiSecret = "x ";
-		final OAuth20Service service = new ServiceBuilder(null).apiKey(apiKey).apiSecret(apiSecret)
-				.callback("url").state("xxxx").scope("snsapi_login")
+		final OAuth20Service service = new ServiceBuilder(null)
+				.apiKey(apiKey)
+				.apiSecret(apiSecret)
+				.callback("http://www.yichisancun.com/qqlogin.htm")
+				.defaultScope("get_user_info,list_album,upload_pic,do_like")
+				.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0")
 				.build(WeiXinApi20.instance());
 		System.out.println(service.getAuthorizationUrl());
 	}
