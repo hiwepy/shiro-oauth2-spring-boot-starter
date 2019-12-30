@@ -1,4 +1,4 @@
-# spring-boot-starter-shiro-oauth2
+# shiro-oauth2-spring-boot-starter
 shiro starter for spring boot
 
 ### 说明
@@ -14,7 +14,7 @@ shiro starter for spring boot
 ``` xml
 <dependency>
 	<groupId>${project.groupId}</groupId>
-	<artifactId>spring-boot-starter-shiro-oauth2</artifactId>
+	<artifactId>shiro-oauth2-spring-boot-starter</artifactId>
 	<version>${project.version}</version>
 </dependency>
 ```
