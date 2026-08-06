@@ -419,6 +419,9 @@
         <fastjson.version>1.2.75</fastjson.version>
         <scribejava.version>6.5.1</scribejava.version>
         <spring-boot-starter-shiro-biz.version>1.1.2.RELEASE</spring-boot-starter-shiro-biz.version>
+                <commons-io.version>2.22.0</commons-io.version>
+                <scribejava-apis-ext.version>2.0.x.20260630-SNAPSHOT</scribejava-apis-ext.version>
+                <slf4j.version>2.0.18</slf4j.version>
     </properties>
     
     <dependencies>
@@ -435,13 +438,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.13</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>2.0.13</version>
+            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
         
@@ -495,7 +498,7 @@
         <dependency>
             <groupId>io.github.easy4j</groupId>
             <artifactId>scribejava-apis-ext</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${scribejava-apis-ext.version}</version>
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/com.github.scribejava/scribejava-core -->
@@ -556,9 +559,37 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
+            <version>${commons-io.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.easy4j</groupId>
+                <artifactId>scribejava-apis-ext</artifactId>
+                <version>${scribejava-apis-ext.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
 </project>
