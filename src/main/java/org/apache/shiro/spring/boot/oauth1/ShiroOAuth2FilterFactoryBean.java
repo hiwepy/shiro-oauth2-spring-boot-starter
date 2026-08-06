@@ -20,7 +20,7 @@ import org.springframework.util.ObjectUtils;
  * 
  * @className	： ShiroOAuth2FilterFactoryBean
  * @description	： TODO(描述这个类的作用)
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ * @author 		： <a href="https://github.com/easy-4-java">hiwepy</a>
  * @date		： 2018年2月8日 上午9:10:54
  * @version 	V1.0
  */

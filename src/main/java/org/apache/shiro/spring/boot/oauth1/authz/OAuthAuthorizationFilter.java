@@ -19,7 +19,7 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 
 /**
  * OAuth授权 (authorization)过滤器 
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ * @author 		： <a href="https://github.com/easy-4-java">hiwepy</a>
  */
 public final class OAuthAuthorizationFilter extends AbstracAuthorizationFilter {
 
