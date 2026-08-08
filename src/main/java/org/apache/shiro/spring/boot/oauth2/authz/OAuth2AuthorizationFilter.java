@@ -3,9 +3,9 @@ package org.apache.shiro.spring.boot.oauth2.authz;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -23,7 +23,7 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 /**
  * OAuth授权 (authorization)过滤器
  * 
- * @author ： <a href="https://github.com/hiwepy">hiwepy</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 public final class OAuth2AuthorizationFilter extends AbstracAuthorizationFilter {
 
