@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
 import org.apache.shiro.biz.spring.ShiroFilterProxyFactoryBean;
 import org.apache.shiro.web.filter.AccessControlFilter;
@@ -20,7 +20,7 @@ import org.springframework.util.ObjectUtils;
  * 
  * @className	： ShiroOAuth2FilterFactoryBean
  * @description	： TODO(描述这个类的作用)
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  * @date		： 2018年2月8日 上午9:10:54
  * @version 	V1.0
  */
