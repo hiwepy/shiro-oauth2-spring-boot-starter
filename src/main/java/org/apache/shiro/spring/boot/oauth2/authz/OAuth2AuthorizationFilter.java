@@ -23,7 +23,7 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 /**
  * OAuth授权 (authorization)过滤器
  * 
- * @author ： <a href="https://github.com/easy-4-java">hiwepy</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 public final class OAuth2AuthorizationFilter extends AbstracAuthorizationFilter {
 
