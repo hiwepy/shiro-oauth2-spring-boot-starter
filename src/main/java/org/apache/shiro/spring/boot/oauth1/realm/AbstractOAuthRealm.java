@@ -33,7 +33,7 @@ import org.apache.shiro.spring.boot.oauth2.token.OAuth2Token;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
-import org.apache.shiro.util.StringUtils;
+import org.springframework.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,7 +129,7 @@ public abstract class AbstractOAuthRealm extends AuthorizingRealm {
      */
     protected List<String> split(final String s) {
         final List<String> list = new ArrayList<String>();
-        final String[] elements = StringUtils.split(s, ',');
+        final String[] elements = s.split(",");
         if (elements != null && elements.length > 0) {
             for (final String element : elements) {
                 if (StringUtils.hasText(element)) {

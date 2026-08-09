@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -221,21 +220,13 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 	private ShiroOAuth2Properties properties;
 	
 	@Bean("oauth2")
-	public FilterRegistrationBean<OAuth2AuthorizationFilter> oauthFilter(ShiroOAuth2Properties properties){
-		FilterRegistrationBean<OAuth2AuthorizationFilter> registration = new FilterRegistrationBean<OAuth2AuthorizationFilter>(); 
-		OAuth2AuthorizationFilter oauthFilter = new OAuth2AuthorizationFilter();
-		registration.setFilter(oauthFilter);
-	    registration.setEnabled(false); 
-	    return registration;
+	public OAuth2AuthorizationFilter oauthFilter(ShiroOAuth2Properties properties){
+		return new OAuth2AuthorizationFilter();
 	}
-	
+
 	@Bean("user")
-	public FilterRegistrationBean<OAuth2UserFilter> userFilter(ShiroOAuth2Properties properties){
-		FilterRegistrationBean<OAuth2UserFilter> registration = new FilterRegistrationBean<OAuth2UserFilter>(); 
-		OAuth2UserFilter oauthFilter = new OAuth2UserFilter();
-		registration.setFilter(oauthFilter);
-	    registration.setEnabled(false); 
-	    return registration;
+	public OAuth2UserFilter userFilter(ShiroOAuth2Properties properties){
+		return new OAuth2UserFilter();
 	}
 	
 	/*@Bean

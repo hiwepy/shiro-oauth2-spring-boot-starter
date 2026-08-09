@@ -18,9 +18,9 @@ package org.apache.shiro.spring.boot.oauth1.authc;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -28,7 +28,7 @@ import org.apache.shiro.biz.web.filter.authc.AbstractAuthenticatingFilter;
 import org.apache.shiro.spring.boot.oauth1.exception.OAuthAuthenticationException;
 import org.apache.shiro.spring.boot.oauth1.token.OAuthToken;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.util.WebUtils;
+import org.apache.shiro.spring.boot.utils.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

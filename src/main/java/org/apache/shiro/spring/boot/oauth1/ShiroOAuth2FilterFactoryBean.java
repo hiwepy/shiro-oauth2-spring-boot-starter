@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jakarta.servlet.Filter;
+import javax.servlet.Filter;
 
 import org.apache.shiro.biz.spring.ShiroFilterProxyFactoryBean;
 import org.apache.shiro.web.filter.AccessControlFilter;
@@ -45,16 +45,16 @@ public class ShiroOAuth2FilterFactoryBean extends ShiroFilterProxyFactoryBean im
 
 		Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
 
-		Map<String, FilterRegistrationBean> beansOfType = getApplicationContext()
-				.getBeansOfType(FilterRegistrationBean.class);
-		if (!ObjectUtils.isEmpty(beansOfType)) {
-			Iterator<Entry<String, FilterRegistrationBean>> ite = beansOfType.entrySet().iterator();
-			while (ite.hasNext()) {
-				Entry<String, FilterRegistrationBean> entry = ite.next();
-				if (this.supports(entry.getValue().getFilter())) {
-					filters.put(entry.getKey(), entry.getValue().getFilter());
-				}
-			}
+		// Get Shiro filter beans directly from application context
+		Map<String, AccessControlFilter> accessFilters = getApplicationContext()
+				.getBeansOfType(AccessControlFilter.class);
+		if (!ObjectUtils.isEmpty(accessFilters)) {
+			filters.putAll(accessFilters);
+		}
+		Map<String, LogoutFilter> logoutFilters = getApplicationContext()
+				.getBeansOfType(LogoutFilter.class);
+		if (!ObjectUtils.isEmpty(logoutFilters)) {
+			filters.putAll(logoutFilters);
 		}
 
 		filters.putAll(super.getFilters());
