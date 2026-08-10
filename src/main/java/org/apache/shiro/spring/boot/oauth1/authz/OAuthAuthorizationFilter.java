@@ -19,7 +19,7 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 
 /**
  * OAuth授权 (authorization)过滤器 
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  */
 public final class OAuthAuthorizationFilter extends AbstracAuthorizationFilter {
 

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Local WebUtils replacement for Shiro compatibility.
  * Uses javax.servlet to match Shiro's API.
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  */
 public final class WebUtils {
 
