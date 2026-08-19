@@ -24,6 +24,7 @@ import com.github.scribejava.core.oauth.OAuth20Service;
  * OAuth授权 (authorization)过滤器
  * 
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public final class OAuth2AuthorizationFilter extends AbstracAuthorizationFilter {
 
@@ -81,18 +82,38 @@ public final class OAuth2AuthorizationFilter extends AbstracAuthorizationFilter 
 		return httpRequest.getParameter(getAuthorizationParameterName());
 	}
 
+	/**
+	 * Returns the oauth20 service.
+	 *
+	 * @return the oauth20 service
+	 */
 	public OAuth20Service getOauth20Service() {
 		return oauth20Service;
 	}
 
+	/**
+	 * Sets the oauth20 service.
+	 *
+	 * @param oauth20Service the oauth20 service
+	 */
 	public void setOauth20Service(OAuth20Service oauth20Service) {
 		this.oauth20Service = oauth20Service;
 	}
 
+	/**
+	 * Returns the authorization parameter name.
+	 *
+	 * @return the authorization parameter name
+	 */
 	public String getAuthorizationParameterName() {
 		return authorizationParameterName;
 	}
 
+	/**
+	 * Sets the authorization parameter name.
+	 *
+	 * @param authorizationParameterName the authorization parameter name
+	 */
 	public void setAuthorizationParameterName(String authorizationParameterName) {
 		this.authorizationParameterName = authorizationParameterName;
 	}

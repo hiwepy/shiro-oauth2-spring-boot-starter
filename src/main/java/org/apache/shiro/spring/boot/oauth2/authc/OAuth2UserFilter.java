@@ -22,20 +22,37 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 
 /**
  * This class specializes the UserFilter to have a login url which is the authorization url of the OAuth provider.
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public final class OAuth2UserFilter extends UserFilter {
     
 	private OAuth20Service oauth20Service;
     
 	@Override
+    /**
+     * Returns the login url.
+     *
+     * @return the login url
+     */
     public String getLoginUrl() {
         return getOauth20Service().getAuthorizationUrl();
     }
     
+    /**
+     * Returns the oauth20 service.
+     *
+     * @return the oauth20 service
+     */
     public OAuth20Service getOauth20Service() {
 		return oauth20Service;
 	}
 
+	/**
+	 * Sets the oauth20 service.
+	 *
+	 * @param oauth20Service the oauth20 service
+	 */
 	public void setOauth20Service(OAuth20Service oauth20Service) {
 		this.oauth20Service = oauth20Service;
 	}

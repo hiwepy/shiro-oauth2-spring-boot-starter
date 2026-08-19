@@ -209,6 +209,12 @@ import org.springframework.context.annotation.Configuration;
 	"org.apache.shiro.spring.boot.ShiroBizWebFilterConfiguration" // spring-boot-starter-shiro-biz
 })
 //@ConditionalOnClass({ org.scribe.up.provider.ProvidersDefinition.class, org.scribe.oauth.OAuth20ServiceImpl.class, io.buji.oauth.OAuthRealm.class })
+/**
+ * <p>Configuration properties.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 @ConditionalOnProperty(prefix = ShiroOAuth2Properties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroOAuth2Properties.class })
 public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterConfiguration implements ApplicationContextAware {
@@ -220,11 +226,23 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 	private ShiroOAuth2Properties properties;
 	
 	@Bean("oauth2")
+	/**
+	 * OAuth Filter.
+	 *
+	 * @param properties the properties
+	 * @return the result
+	 */
 	public OAuth2AuthorizationFilter oauthFilter(ShiroOAuth2Properties properties){
 		return new OAuth2AuthorizationFilter();
 	}
 
 	@Bean("user")
+	/**
+	 * user Filter.
+	 *
+	 * @param properties the properties
+	 * @return the result
+	 */
 	public OAuth2UserFilter userFilter(ShiroOAuth2Properties properties){
 		return new OAuth2UserFilter();
 	}
@@ -263,6 +281,11 @@ public class ShiroOAuth2WebFilterConfiguration extends AbstractShiroWebFilterCon
 		this.applicationContext = applicationContext;
 	}
 
+	/**
+	 * Returns the application context.
+	 *
+	 * @return the application context
+	 */
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
 	}

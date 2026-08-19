@@ -23,11 +23,17 @@ import org.springframework.util.ObjectUtils;
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @date		： 2018年2月8日 上午9:10:54
  * @version 	V1.0
+ * @since 1.0.0
  */
 public class ShiroOAuth2FilterFactoryBean extends ShiroFilterProxyFactoryBean implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
 
+	/**
+	 * Returns the application context.
+	 *
+	 * @return the application context
+	 */
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
 	}
@@ -64,6 +70,12 @@ public class ShiroOAuth2FilterFactoryBean extends ShiroFilterProxyFactoryBean im
 	}
 
 	@Override
+	/**
+	 * Sets the application context.
+	 *
+	 * @param applicationContext the application context
+	 * @throws BeansException if an error occurs
+	 */
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}

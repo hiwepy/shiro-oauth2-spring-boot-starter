@@ -17,6 +17,12 @@ package org.apache.shiro.spring.boot.oauth2.exception;
 
 import org.apache.shiro.authc.AuthenticationException;
 
+/**
+ * <p>Exception for O Auth2 Authentication.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 @SuppressWarnings("serial")
 public class OAuth2AuthenticationException extends AuthenticationException {
 

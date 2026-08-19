@@ -41,6 +41,8 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 
 /**
  * This realm implementation is dedicated to OAuth2 authentication. 
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public abstract class AbstractOAuth2Realm extends AuthorizingRealm {
     
@@ -102,6 +104,12 @@ public abstract class AbstractOAuth2Realm extends AuthorizingRealm {
         return new SimpleAuthenticationInfo(principalCollection, credential);
     }
     
+    /**
+     * get User Profile.
+     *
+     * @param credential the credential
+     * @return the result
+     */
     public abstract UserProfile getUserProfile(OAuth2AccessToken credential);
     
     /**
@@ -140,18 +148,38 @@ public abstract class AbstractOAuth2Realm extends AuthorizingRealm {
         return list;
     }
     
+	/**
+	 * Returns the oauth20 service.
+	 *
+	 * @return the oauth20 service
+	 */
 	public OAuth20Service getOauth20Service() {
 		return oauth20Service;
 	}
 
+	/**
+	 * Sets the oauth20 service.
+	 *
+	 * @param oauth20Service the oauth20 service
+	 */
 	public void setOauth20Service(OAuth20Service oauth20Service) {
 		this.oauth20Service = oauth20Service;
 	}
 
+	/**
+	 * Sets the default roles.
+	 *
+	 * @param defaultRoles the default roles
+	 */
 	public void setDefaultRoles(final String defaultRoles) {
         this.defaultRoles = defaultRoles;
     }
     
+    /**
+     * Sets the default permissions.
+     *
+     * @param defaultPermissions the default permissions
+     */
     public void setDefaultPermissions(final String defaultPermissions) {
         this.defaultPermissions = defaultPermissions;
     }

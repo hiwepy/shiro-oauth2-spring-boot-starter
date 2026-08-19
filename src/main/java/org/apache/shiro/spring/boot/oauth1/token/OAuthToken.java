@@ -23,6 +23,8 @@ import com.github.scribejava.core.model.OAuth1AccessToken;
 
 /**
  * This class represents a token for an OAuth authentication process (OAuth credential + user identifier after authentication).
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public final class OAuthToken implements AuthenticationToken, HostAuthenticationToken {
     
@@ -41,18 +43,38 @@ public final class OAuthToken implements AuthenticationToken, HostAuthentication
     }
     
     @Override
+	/**
+	 * Returns the host.
+	 *
+	 * @return the host
+	 */
 	public String getHost() {
 		return host;
 	}
     
+    /**
+     * Sets the user id.
+     *
+     * @param userId the user id
+     */
     public void setUserId(String userId) {
         this.userId = userId;
     }
     
+    /**
+     * Returns the principal.
+     *
+     * @return the principal
+     */
     public Object getPrincipal() {
         return userId;
     }
     
+    /**
+     * Returns the credentials.
+     *
+     * @return the credentials
+     */
     public Object getCredentials() {
         return credential;
     }

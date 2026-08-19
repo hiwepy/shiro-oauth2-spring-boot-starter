@@ -20,6 +20,7 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 /**
  * OAuth授权 (authorization)过滤器 
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public final class OAuthAuthorizationFilter extends AbstracAuthorizationFilter {
 
@@ -75,18 +76,38 @@ public final class OAuthAuthorizationFilter extends AbstracAuthorizationFilter {
 		return httpRequest.getParameter(getAuthorizationParameterName());
 	}
 
+    /**
+     * Returns the oauth10 service.
+     *
+     * @return the oauth10 service
+     */
     public OAuth10aService getOauth10Service() {
 		return oauth10Service;
 	}
 
+	/**
+	 * Sets the oauth10 service.
+	 *
+	 * @param oauth10Service the oauth10 service
+	 */
 	public void setOauth10Service(OAuth10aService oauth10Service) {
 		this.oauth10Service = oauth10Service;
 	}
 
+	/**
+	 * Returns the authorization parameter name.
+	 *
+	 * @return the authorization parameter name
+	 */
 	public String getAuthorizationParameterName() {
 		return authorizationParameterName;
 	}
 
+	/**
+	 * Sets the authorization parameter name.
+	 *
+	 * @param authorizationParameterName the authorization parameter name
+	 */
 	public void setAuthorizationParameterName(String authorizationParameterName) {
 		this.authorizationParameterName = authorizationParameterName;
 	}

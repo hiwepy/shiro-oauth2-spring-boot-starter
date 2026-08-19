@@ -22,6 +22,12 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * <p>Configuration properties.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 @ConfigurationProperties(ShiroOAuth2Properties.PREFIX)
 public class ShiroOAuth2Properties {
 
@@ -65,18 +71,38 @@ public class ShiroOAuth2Properties {
     // default permissions applied to authenticated user
     private String defaultPermissions;
 	
+	/**
+	 * Returns the enabled.
+	 *
+	 * @return the enabled
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * Sets the enabled.
+	 *
+	 * @param enabled the enabled
+	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
+	/**
+	 * Returns the authorization cache name.
+	 *
+	 * @return the authorization cache name
+	 */
 	public String getAuthorizationCacheName() {
         return authorizationCacheName;
     }
 
+    /**
+     * Sets the authorization cache name.
+     *
+     * @param authorizationCacheName the authorization cache name
+     */
     public void setAuthorizationCacheName(String authorizationCacheName) {
         this.authorizationCacheName = authorizationCacheName;
     }
@@ -199,34 +225,74 @@ public class ShiroOAuth2Properties {
         this.cachingEnabled = cachingEnabled;
     }
 
+	/**
+	 * Returns the login url.
+	 *
+	 * @return the login url
+	 */
 	public String getLoginUrl() {
 		return loginUrl;
 	}
 
+	/**
+	 * Sets the login url.
+	 *
+	 * @param loginUrl the login url
+	 */
 	public void setLoginUrl(String loginUrl) {
 		this.loginUrl = loginUrl;
 	}
 
+	/**
+	 * Returns the redirect url.
+	 *
+	 * @return the redirect url
+	 */
 	public String getRedirectUrl() {
 		return redirectUrl;
 	}
 
+	/**
+	 * Sets the redirect url.
+	 *
+	 * @param redirectUrl the redirect url
+	 */
 	public void setRedirectUrl(String redirectUrl) {
 		this.redirectUrl = redirectUrl;
 	}
 
+	/**
+	 * Returns the success url.
+	 *
+	 * @return the success url
+	 */
 	public String getSuccessUrl() {
 		return successUrl;
 	}
 
+	/**
+	 * Sets the success url.
+	 *
+	 * @param successUrl the success url
+	 */
 	public void setSuccessUrl(String successUrl) {
 		this.successUrl = successUrl;
 	}
 
+	/**
+	 * Returns the unauthorized url.
+	 *
+	 * @return the unauthorized url
+	 */
 	public String getUnauthorizedUrl() {
 		return unauthorizedUrl;
 	}
 
+	/**
+	 * Sets the unauthorized url.
+	 *
+	 * @param unauthorizedUrl the unauthorized url
+	 */
 	public void setUnauthorizedUrl(String unauthorizedUrl) {
 		this.unauthorizedUrl = unauthorizedUrl;
 	}
@@ -235,30 +301,65 @@ public class ShiroOAuth2Properties {
 		return filterChainDefinitionMap;
 	}
 
+	/**
+	 * Sets the filter chain definition map.
+	 *
+	 * @param filterChainDefinitionMap the filter chain definition map
+	 */
 	public void setFilterChainDefinitionMap(Map<String, String> filterChainDefinitionMap) {
 		this.filterChainDefinitionMap = filterChainDefinitionMap;
 	}
 
+	/**
+	 * Returns the base url.
+	 *
+	 * @return the base url
+	 */
 	public String getBaseUrl() {
 		return baseUrl;
 	}
 
+	/**
+	 * Sets the base url.
+	 *
+	 * @param baseUrl the base url
+	 */
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
 	}
     
+	/**
+	 * Returns the default roles.
+	 *
+	 * @return the default roles
+	 */
 	public String getDefaultRoles() {
 		return defaultRoles;
 	}
 
+	/**
+	 * Sets the default roles.
+	 *
+	 * @param defaultRoles the default roles
+	 */
 	public void setDefaultRoles(String defaultRoles) {
 		this.defaultRoles = defaultRoles;
 	}
 
+	/**
+	 * Returns the default permissions.
+	 *
+	 * @return the default permissions
+	 */
 	public String getDefaultPermissions() {
 		return defaultPermissions;
 	}
 
+	/**
+	 * Sets the default permissions.
+	 *
+	 * @param defaultPermissions the default permissions
+	 */
 	public void setDefaultPermissions(String defaultPermissions) {
 		this.defaultPermissions = defaultPermissions;
 	}

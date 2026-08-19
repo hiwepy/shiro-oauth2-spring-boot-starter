@@ -22,6 +22,12 @@ import org.springframework.context.annotation.Configuration;
 })
 @ConditionalOnWebApplication
 //@ConditionalOnClass({ org.scribe.up.provider.ProvidersDefinition.class, org.scribe.oauth.OAuth20ServiceImpl.class, io.buji.oauth.OAuthRealm.class })
+/**
+ * <p>Configuration properties.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 @ConditionalOnProperty(prefix = ShiroOAuth2Properties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroOAuth2Properties.class })
 public class ShiroOAuth2WebAutoConfiguration extends AbstractShiroWebConfiguration {

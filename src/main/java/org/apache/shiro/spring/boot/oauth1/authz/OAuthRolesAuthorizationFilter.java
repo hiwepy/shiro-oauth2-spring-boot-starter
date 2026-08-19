@@ -28,12 +28,19 @@ import com.github.scribejava.core.oauth.OAuth10aService;
  * This class specializes the RolesAuthorizationFilter to have a login url which is the authorization url of the OAuth provider.
  * https://github.com/scribejava/scribejava  <br/>
  * https://github.com/scribejava/scribejava/wiki/getting-started
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public final class OAuthRolesAuthorizationFilter extends RolesAuthorizationFilter {
     
 	private OAuth10aService oauth10Service;
 	
 	@Override
+    /**
+     * Returns the login url.
+     *
+     * @return the login url
+     */
     public String getLoginUrl() {
 		try {
         	// Step 1: Get the request token
@@ -50,10 +57,20 @@ public final class OAuthRolesAuthorizationFilter extends RolesAuthorizationFilte
         return super.getLoginUrl();
     }
 
+	/**
+	 * Returns the oauth10 service.
+	 *
+	 * @return the oauth10 service
+	 */
 	public OAuth10aService getOauth10Service() {
 		return oauth10Service;
 	}
 
+	/**
+	 * Sets the oauth10 service.
+	 *
+	 * @param oauth10Service the oauth10 service
+	 */
 	public void setOauth10Service(OAuth10aService oauth10Service) {
 		this.oauth10Service = oauth10Service;
 	}

@@ -44,6 +44,8 @@ import com.github.scribejava.core.oauth.OAuth10aService;
  * https://github.com/scribejava/scribejava <br/>
  * https://github.com/scribejava/scribejava/wiki/getting-started <br/>
  * https://github.com/scribejava/scribejava/tree/master/scribejava-apis/src/test/java/com/github/scribejava/apis/examples
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public final class OauthAuthenticatingFilter extends AbstractAuthenticatingFilter {
 
@@ -200,6 +202,11 @@ public final class OauthAuthenticatingFilter extends AbstractAuthenticatingFilte
 	}
 
 	@Override
+	/**
+	 * Returns the login url.
+	 *
+	 * @return the login url
+	 */
 	public String getLoginUrl() {
 		try {
 			// Step 1: Get the request token
@@ -226,22 +233,47 @@ public final class OauthAuthenticatingFilter extends AbstractAuthenticatingFilte
 		return httpRequest.getParameter(getAuthorizationParameterName());
 	}
 
+	/**
+	 * Sets the failure url.
+	 *
+	 * @param failureUrl the failure url
+	 */
 	public void setFailureUrl(String failureUrl) {
 		this.failureUrl = failureUrl;
 	}
 
+	/**
+	 * Returns the oauth10 service.
+	 *
+	 * @return the oauth10 service
+	 */
 	public OAuth10aService getOauth10Service() {
 		return oauth10Service;
 	}
 
+	/**
+	 * Sets the oauth10 service.
+	 *
+	 * @param oauth10Service the oauth10 service
+	 */
 	public void setOauth10Service(OAuth10aService oauth10Service) {
 		this.oauth10Service = oauth10Service;
 	}
 
+	/**
+	 * Returns the authorization parameter name.
+	 *
+	 * @return the authorization parameter name
+	 */
 	public String getAuthorizationParameterName() {
 		return authorizationParameterName;
 	}
 
+	/**
+	 * Sets the authorization parameter name.
+	 *
+	 * @param authorizationParameterName the authorization parameter name
+	 */
 	public void setAuthorizationParameterName(String authorizationParameterName) {
 		this.authorizationParameterName = authorizationParameterName;
 	}

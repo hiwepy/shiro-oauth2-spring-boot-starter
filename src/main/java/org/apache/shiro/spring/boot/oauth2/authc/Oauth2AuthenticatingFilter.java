@@ -42,6 +42,8 @@ import com.github.scribejava.core.oauth.OAuth20Service;
  * 
  * https://github.com/scribejava/scribejava  <br/>
  * https://github.com/scribejava/scribejava/wiki/getting-started
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public final class Oauth2AuthenticatingFilter extends AbstractAuthenticatingFilter {
     
@@ -176,6 +178,11 @@ public final class Oauth2AuthenticatingFilter extends AbstractAuthenticatingFilt
     }
     
     @Override
+    /**
+     * Returns the login url.
+     *
+     * @return the login url
+     */
     public String getLoginUrl() {
         return getOauth20Service().getAuthorizationUrl();
     }
@@ -191,22 +198,47 @@ public final class Oauth2AuthenticatingFilter extends AbstractAuthenticatingFilt
    }
 
     
+    /**
+     * Sets the failure url.
+     *
+     * @param failureUrl the failure url
+     */
     public void setFailureUrl(String failureUrl) {
         this.failureUrl = failureUrl;
     }
 
+	/**
+	 * Returns the oauth20 service.
+	 *
+	 * @return the oauth20 service
+	 */
 	public OAuth20Service getOauth20Service() {
 		return oauth20Service;
 	}
 
+	/**
+	 * Sets the oauth20 service.
+	 *
+	 * @param oauth20Service the oauth20 service
+	 */
 	public void setOauth20Service(OAuth20Service oauth20Service) {
 		this.oauth20Service = oauth20Service;
 	}
 
+	/**
+	 * Returns the authorization parameter name.
+	 *
+	 * @return the authorization parameter name
+	 */
 	public String getAuthorizationParameterName() {
 		return authorizationParameterName;
 	}
 
+	/**
+	 * Sets the authorization parameter name.
+	 *
+	 * @param authorizationParameterName the authorization parameter name
+	 */
 	public void setAuthorizationParameterName(String authorizationParameterName) {
 		this.authorizationParameterName = authorizationParameterName;
 	}

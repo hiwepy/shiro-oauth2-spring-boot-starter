@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
  * (objects). Additional concepts are the "remember me" nature of the user profile, the associated roles, permissions, client name and 
  * linked identifier.
  *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public abstract class UserProfile implements Serializable, Externalizable {
 
@@ -375,6 +377,12 @@ public abstract class UserProfile implements Serializable, Externalizable {
 
   
     @Override
+    /**
+     * write External.
+     *
+     * @param out the out
+     * @throws IOException if an error occurs
+     */
     public void writeExternal(final ObjectOutput out) throws IOException {
         out.writeObject(this.id);
         out.writeObject(this.attributes);
@@ -387,6 +395,13 @@ public abstract class UserProfile implements Serializable, Externalizable {
     }
 
     @Override
+    /**
+     * read External.
+     *
+     * @param in the in
+     * @throws IOException if an error occurs
+     * @throws ClassNotFoundException if an error occurs
+     */
     public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
         this.id = (String) in.readObject();
         this.attributes = (Map) in.readObject();
@@ -398,22 +413,46 @@ public abstract class UserProfile implements Serializable, Externalizable {
         this.linkedId = (String) in.readObject();
     }
 
+    /**
+     * clear Sensitive Data.
+     *
+     */
     public void clearSensitiveData() {
         // No-op. Allow subtypes to specify which state should be cleared out.
     }
 
+    /**
+     * Returns the client name.
+     *
+     * @return the client name
+     */
     public String getClientName() {
         return clientName;
     }
 
+    /**
+     * Sets the client name.
+     *
+     * @param clientName the client name
+     */
     public void setClientName(final String clientName) {
         this.clientName = clientName;
     }
 
+    /**
+     * Returns the linked id.
+     *
+     * @return the linked id
+     */
     public String getLinkedId() {
         return linkedId;
     }
 
+    /**
+     * Sets the linked id.
+     *
+     * @param linkedId the linked id
+     */
     public void setLinkedId(final String linkedId) {
         this.linkedId = linkedId;
     }
